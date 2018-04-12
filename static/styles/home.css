@@ -68,6 +68,7 @@ img.bkgd {
     color: rgba(0,0,0,.4);
     -webkit-transition: .30s;
     transition: .30s;
+    float: inherit;
 }
 
 .fa-heart-o:hover {
