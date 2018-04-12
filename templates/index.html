@@ -1,7 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
-<button class="btn blue-gradient btn-rounded">Blue</button>
-<button type="button" class="btn btn-primary">Primary</button>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <form method=POST action="{{ url_for('login') }}">
+                <div class="md-form">
+                    <input type="text" id="usernameField" class="form-control" name="username">
+                    <label for="usernameField">Username</label>
+                </div>
+                <div class="md-form">
+                    <input type="password" id="passwordField" class="form-control validate" name="password">
+                    <label for="passwordField" data-error="wrong" data-success="right">Password</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3 mb-2">Log In</button>
+            </form>
+            <div>
+                Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
