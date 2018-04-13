@@ -45,6 +45,13 @@ img.bkgd {
     color: #FFD44E;
 }
 
+a.midd {
+  text-align: center;
+  cursor: default;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .waves-effect {
     position: relative;
     cursor: pointer;

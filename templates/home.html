@@ -1,11 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+
 <img src="{{url_for('static', filename='img/gym.jpg')}}" class="bkgd" alt="background">
 
-<div class="container">
+<div id="top-section" class="container">
   {% include 'includes/_navbar.html' %}
   {% include 'includes/_workoutlist.html' %}
+  {% include 'includes/_workoutlist.html' %}
+  {% include 'includes/_workoutlist.html' %}
 </div>
-
+<div class="fixed-action-btn" style="bottom: 115px; right: 400px;">
+    <a class="btn-floating btn-lg">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </a>
+</div>
+<div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 408px;">
+    <a href="#top-section" class="btn-floating btn-large">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
 {% endblock %}
