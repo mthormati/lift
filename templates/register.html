@@ -1,27 +1,75 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="vertical-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 card p-4">
-                <form method=POST action="{{ url_for('login') }}" class="text-center">
-                    <img src="{{ url_for('static', filename='logo.png') }}" width="200" height="80">
-                    <div class="md-form">
-                        <input type="text" id="usernameField" class="form-control input-cyan" name="username">
-                        <label class="color-deep-orange" for="usernameField">Username</label>
-                    </div>
-                    <div class="md-form">
-                        <input type="password" id="passwordField" class="form-control validate input-cyan" name="password">
-                        <label for="passwordField" data-error="wrong" data-success="right">Password</label>
-                    </div>
-                    <button type="submit" class="btn deep-orange btn-rounded mt-3 mb-2">Log In</button>
-                </form>
-                <div>
-                    Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>
+<div class="background">
+    <div class="vertical-center">
+        <div class="container">
+            <div class="row mx-4">
+                <div class="col-sm-6 offset-sm-3 card py-5 px-4 text-center">
+                    <form method=POST action="{{ url_for('register') }}" enctype="multipart/form-data">
+                        <img src="{{ url_for('static', filename='assets/logo.png') }}" width="200" height="80" class="mb-3">
+                        <!-- name -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="nameField" class="form-control input-cyan" name="name" required>
+                                <label for="nameField">Full Name</label>
+                            </div>
+                        </div>
+                        <!-- email -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="emailField" class="form-control input-cyan" name="name" required>
+                                <label for="nameField">Email</label>
+                            </div>
+                        </div>
+                        <!-- weight/height -->
+                        <div class="form-row">
+                            <div class="col-sm-6 md-form form-group">
+                                <input type="text" id="emailField" class="form-control input-cyan" name="name" required>
+                                <label for="nameField">Weight (lbs)</label>
+                            </div>
+                            <div class="col-sm-6 md-form form-group">
+                                <input type="text" id="emailField" class="form-control input-cyan" name="name" required>
+                                <label for="nameField">Height (Inches)</label>
+                            </div>
+                        </div>
+                        <!-- experience -->
+                        <div class="form-row text-left my-4">
+                            <span class="col-sm-12 mb-4 color-grey">Current Experience Level: </span><br/>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expWeak" value="weak" checked>
+                                <label class="form-check-label color-grey radio-cyan" for="expWeak">
+                                    Noob
+                                </label>
+                            </div>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expIntermediate" value="intermediate">
+                                <label class="form-check-label color-grey" for="expIntermediate">
+                                    Intermediate
+                                </label>
+                            </div>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expRipped" value="ripped">
+                                <label class="form-check-label color-grey" for="expRipped">
+                                    Ripped
+                                </label>
+                            </div>
+                        </div>
+                        <!-- password -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="passwordField" class="form-control input-cyan" name="password" required>
+                                <label for="passwordField">Password</label>
+                            </div>
+                        </div>
+                        <!-- submit -->
+                        <button type="submit" class="btn deep-orange btn-rounded btn-block mt-4">Register</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 {% endblock %}

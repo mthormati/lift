@@ -16,9 +16,21 @@
     align-items: center;
 }
 
-body {
-    background-image: url("../background.jpg");
+.background {
+    background-image: url("../assets/background.jpg");
     background-repeat: no-repeat;
     background-size: 100vw 100vh;
     background-attachment: fixed;
+}
+
+.color-grey {
+    color: #757575
+}
+
+[type="radio"].with-gap:checked + label::before {
+    border-color: #00BCD4;
+}
+[type="radio"]:checked + label::after {
+    border-color: #00BCD4;
+    background-color: #00BCD4;
 }
