@@ -4,7 +4,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    errorMessage = ''
+    return render_template('index.html', errorMessage=errorMessage)
 
 @app.route('/login', methods=['POST'])
 def login():

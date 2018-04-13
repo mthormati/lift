@@ -27,6 +27,14 @@
     color: #757575
 }
 
+.form-error {
+    background-color: #c86e6e;
+    background: #ffe6e6;
+    border: 1px solid #f5c8c8;
+    padding: 10px;
+    border-radius: .25rem;
+}
+
 [type="radio"].with-gap:checked + label::before {
     border-color: #00BCD4;
 }
