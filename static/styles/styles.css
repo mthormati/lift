@@ -1,0 +1,17 @@
+.input-cyan:focus {
+    box-shadow: 0 1px 0 0 #00BCD4 !important;
+    border-bottom: 1px solid #00BCD4 !important;
+}
+.input-cyan:focus:not([readonly]) + label {
+    color: #00BCD4 !important;
+}
+.input-cyan:focus:not([readonly]) + label {
+    color: #00BCD4 !important;
+}
+
+.vertical-center {
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }

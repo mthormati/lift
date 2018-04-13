@@ -1,22 +1,25 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 offset-md-4">
-            <form method=POST action="{{ url_for('login') }}">
-                <div class="md-form">
-                    <input type="text" id="usernameField" class="form-control" name="username">
-                    <label for="usernameField">Username</label>
+<div class="vertical-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4 card p-4">
+                <form method=POST action="{{ url_for('login') }}" class="text-center">
+                    <img src="{{ url_for('static', filename='logo.png') }}" width="200" height="80">
+                    <div class="md-form">
+                        <input type="text" id="usernameField" class="form-control input-cyan" name="username">
+                        <label class="color-deep-orange" for="usernameField">Username</label>
+                    </div>
+                    <div class="md-form">
+                        <input type="password" id="passwordField" class="form-control validate input-cyan" name="password">
+                        <label for="passwordField" data-error="wrong" data-success="right">Password</label>
+                    </div>
+                    <button type="submit" class="btn deep-orange btn-rounded mt-3 mb-2">Log In</button>
+                </form>
+                <div>
+                    Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>
                 </div>
-                <div class="md-form">
-                    <input type="password" id="passwordField" class="form-control validate" name="password">
-                    <label for="passwordField" data-error="wrong" data-success="right">Password</label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block mt-3 mb-2">Log In</button>
-            </form>
-            <div>
-                Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>
             </div>
         </div>
     </div>
