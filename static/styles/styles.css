@@ -14,4 +14,11 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-  }
+}
+
+body {
+    background-image: url("../background.jpg");
+    background-repeat: no-repeat;
+    background-size: 100vw 100vh;
+    background-attachment: fixed;
+}
