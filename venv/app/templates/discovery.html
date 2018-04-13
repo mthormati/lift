@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% include 'includes/_navbar.html' %}
+
+<!-- Body of discovery page -->
+<div class="container" style="padding-top:30px;padding-bottom: 30px">
+	<!-- Friend Discovery Radio Button -->
+	<div class="btn-group" data-toggle="buttons" style="width:100%;">
+		<label class="btn btn-primary btn-block active">
+			<input type="radio" name="Friends" id="friends" autocomplete="off" checked> 
+			Friends
+		</label>
+		<label class="btn btn-primary btn-block">
+			<input type="radio" name="Discovery" id="discovery" autocomplete="off"> 
+			Discovery
+		</label>
+	</div>
+	<!--/ Friend Discovery Radio Button -->
+
+	{% include 'includes/_workoutpost.html' %}
+	{% include 'includes/_workoutpost.html' %}
+
+</div>
+<!--/ Body of discovery page -->
+
+{% endblock %}
