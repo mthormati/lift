@@ -1,3 +1,7 @@
+body {
+    background-color: #EEEEEE;
+}
+
 .input-cyan:focus {
     box-shadow: 0 1px 0 0 #00BCD4 !important;
     border-bottom: 1px solid #00BCD4 !important;
@@ -35,6 +39,21 @@
     border-radius: .25rem;
 }
 
+.gradient-border {
+    width: 100vw;
+    height: 5px;
+
+	-webkit-transition: background 250ms ease-in-out !important;
+	transition: background 250ms ease-in-out !important;
+	background: -webkit-gradient(linear, left top, right top, from(#00bcd4), color-stop(70%, #FF5722), to(#00bcd4));
+	background: linear-gradient(to right, #FF5722 0%, #FF5722 70%, #00bcd4 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00bcd4', endColorstr='$color', GradientType=1);
+}
+
+.font-16 {
+    font-size: 16px !important;
+}
+
 [type="radio"].with-gap:checked + label::before {
     border-color: #00BCD4;
 }
@@ -42,3 +61,4 @@
     border-color: #00BCD4;
     background-color: #00BCD4;
 }
+

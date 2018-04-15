@@ -4,10 +4,10 @@
 <div class="background">
     <div class="vertical-center">
         <div class="container">
-            <div class="row mx-4">
+            <div class="row m-4">
                 <div class="col-sm-6 offset-sm-3 card py-5 px-4 text-center">
                     <form method=POST action="{{ url_for('register') }}" enctype="multipart/form-data">
-                        <img src="{{ url_for('static', filename='assets/logo.png') }}" width="200" height="80" class="mb-3">
+                        <img src="{{ url_for('static', filename='assets/ic_launcher_orange.png') }}" width="200" height="80" class="mb-3">
                         <!-- display error message if necessary -->
                         {% include 'includes/form-error.html' %}
                         <!-- name -->
@@ -20,8 +20,8 @@
                         <!-- email -->
                         <div class="form-row">
                             <div class="col md-form form-group">
-                                <input type="text" id="emailField" class="form-control input-cyan" name="email" required>
-                                <label for="emailField">Email</label>
+                                <input type="text" id="usernameField" class="form-control input-cyan" name="username" required>
+                                <label for="usernameField">Username</label>
                             </div>
                         </div>
                         <!-- weight/height -->
@@ -66,6 +66,7 @@
                         </div>
                         <!-- submit -->
                         <button type="submit" class="btn deep-orange btn-rounded btn-block mt-4">Register</button>
+                        <a type="submit" class="btn deep-orange btn-rounded btn-block mt-4" href="{{ url_for('index') }}">Back to log in</a>
                     </form>
                 </div>
             </div>

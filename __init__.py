@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from variables import *
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 import bcrypt
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ mongo = PyMongo(app)
 def index():
     if 'username' in session:
         #Change return to render home page
-        return 'Redirect to home page'
+        return render_template('profile.html')
     return render_template('index.html')
 
 
@@ -23,11 +24,11 @@ def login():
     errorMessage = ''
     #Get user information from database
     users = mongo.db.users
-    loginUser = users.find_one({'email': request.form['email']})
+    loginUser = users.find_one({'username': request.form['username']})
     #Check if user exists
     if loginUser:
         if bcrypt.hashpw(request.form['password'].encode('utf-8'), loginUser['password']) == loginUser['password']:
-            session['username'] = request.form['email']
+            session['username'] = request.form['username']
             return redirect(url_for('index'))
     errorMessage = 'Incorrect username or password'
     return render_template('index.html', errorMessage=errorMessage)
@@ -39,21 +40,22 @@ def register():
     errorMessage = ''
     if request.method == 'POST':
         users = mongo.db.users
-        existingUser = users.find_one({'email' : request.form['email']})
+        existingUser = users.find_one({'username' : request.form['username']})
         #Check if user exists
         if existingUser is None:
             #Hash password and insert user information in database
             hashpass = bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt())
-            users.insert({'email' : request.form['email'],
+            users.insert({'username' : request.form['username'],
                                 'password': hashpass,
                                 'name': request.form['name'],
                                 'weight': request.form['weight'],
                                 'height': request.form['height'],
                                 'experience': request.form['experience']})
-            session['username'] = request.form['email']
+            session['username'] = request.form['username']
 
             return redirect(url_for('index'))
-        return 'That username already exists'
+        errorMessage = 'Username is taken'
+        return render_template('register.html', errorMessage=errorMessage)
     return render_template('register.html')
 
 if __name__ == '__main__':
