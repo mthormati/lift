@@ -58,6 +58,10 @@ def register():
         return render_template('register.html', errorMessage=errorMessage)
     return render_template('register.html')
 
+@app.route('/profile', methods=['GET'])
+def profile():
+    return render_template('profile.html')
+
 if __name__ == '__main__':
     app.secret_key = key
     app.run(debug=True)
