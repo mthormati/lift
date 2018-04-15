@@ -14,10 +14,12 @@ mongo = PyMongo(app)
 @app.route('/')
 def index():
     if 'username' in session:
-        #Change return to render home page
-        return 'home'
+        return render_template('home.html')
     return render_template('index.html')
 
+@app.route('/discovery', methods=['GET'])
+def discovery():
+    return render_template('discovery.html')
 
 @app.route('/login', methods=['POST'])
 def login():

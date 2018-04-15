@@ -62,9 +62,9 @@ body {
     background-color: #00BCD4;
 }
 
-[type="checkbox"]:checked + label::before {
+/* [type="checkbox"]:checked + label::before {
     border-color: transparent cyan cyan transparent !important;
-}
+} */
 
 .custom-container {
     height: 600px;
