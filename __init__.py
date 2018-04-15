@@ -15,7 +15,7 @@ mongo = PyMongo(app)
 def index():
     if 'username' in session:
         #Change return to render home page
-        return render_template('profile.html')
+        return 'home'
     return render_template('index.html')
 
 
@@ -60,7 +60,9 @@ def register():
 
 @app.route('/profile', methods=['GET'])
 def profile():
-    return render_template('profile.html')
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    return render_template('profile.html', user=user)
 
 if __name__ == '__main__':
     app.secret_key = key

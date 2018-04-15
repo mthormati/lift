@@ -2,6 +2,94 @@
 
 {% block body %}
 
-    {% include 'includes/workout-card.html' %}
+
+
+<div class="container expanded">
+    <div class="row mt-4">
+        <div class="col-sm-12 col-md-6 p-2">
+            <div class="header text-center py-3">Personal Information</div>
+            <div class="card custom-container edge-top">
+                <!-- Extended default form grid -->
+                <form class="p-4">
+                    <!-- profile picture -->
+                    <div class="form-row mb-3">
+                        <div class="file-field col">
+                            <div class="btn deep-orange btn-sm float-left">
+                                <span>Choose file</span>
+                                <input type="file" accept=".jpg, .png">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Change profile picture" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- name -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="inputName">Name</label>
+                            <input type="text" class="form-control grey-input" id="inputName" placeholder="{{ user['name'] }}">
+                        </div>
+                    </div>
+
+                    <!-- Default input -->
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label for="inputWeight">Weight (lbs)</label>
+                            <input type="number" class="form-control grey-input" id="inputWeight" placeholder="{{ user['weight'] }}">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="inputHeight">Height (inches)</label>
+                            <input type="number" class="form-control grey-input" id="inputHeight" placeholder="{{ user['height'] }}">
+                        </div>
+                    </div>
+
+                    <!-- experience -->
+                    <div class="form-row text-left mb-1">
+                        <span class="col-sm-12">Experience: </span><br/>
+                    </div>
+                    <div class="row">
+                        <div class="col form-check">
+                            <input class="form-check-input with-gap" type="radio" name="experience" id="expBeginner" value="beginner"
+                                {% if user['experience'] == 'beginner'  %} checked="checked" {% endif %}>
+                            <label class="form-check-label color-grey radio-cyan black-text" for="expBeginner">
+                                Noob
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-check">
+                            <input class="form-check-input with-gap" type="radio" name="experience" id="expIntermediate" value="intermediate"
+                                {% if user['experience'] == 'intermediate'  %} checked="checked" {% endif %}>
+                            <label class="form-check-label color-grey black-text" for="expIntermediate">
+                                Intermediate
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col form-check">
+                            <input class="form-check-input with-gap" type="radio" name="experience" id="expAdvanced" value="advanced"
+                                {% if user['experience'] == 'advanced'  %} checked="checked" {% endif %}>
+                            <label class="form-check-label color-grey black-text" for="expAdvanced">
+                                Ripped
+                            </label>
+                        </div>
+                    </div>
+                    <!-- submit -->
+                    <button type="submit" class="btn deep-orange btn-md">Update Info</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 p-2">
+            <div class="header text-center py-3">Workout Routines</div>
+            <div class="card custom-container edge-top scrollbar-primary">
+                {% include 'includes/workout-card.html' %}
+                {% include 'includes/workout-card.html' %}
+                {% include 'includes/workout-card.html' %}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
