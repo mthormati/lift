@@ -7,21 +7,21 @@
             <div class="row mx-4">
                 <div class="col-sm-4 offset-sm-4 card py-5 px-4 text-center">
                     <form method=POST action="{{ url_for('login') }}">
-                        <img src="{{ url_for('static', filename='assets/ic_launcher_orange.png') }}" width="200" height="80" class="mb-3">
+                        <img src="{{ url_for('static', filename='assets/ic_launcher_blue.png') }}" width="200" height="80" class="mb-3">
                         <!-- display error message if necessary -->
                         {% include 'includes/form-error.html' %}
                         <!-- email -->
                         <div class="md-form">
-                            <input type="text" id="usernameField" class="form-control input-cyan" name="username" required>
+                            <input type="text" id="usernameField" class="form-control input-secondary" name="username" required>
                             <label class="color-deep-orange" for="usernameField">Username</label>
                         </div>
                         <!-- password -->
                         <div class="md-form">
-                            <input type="password" id="passwordField" class="form-control input-cyan" name="password" required>
+                            <input type="password" id="passwordField" class="form-control input-secondary" name="password" required>
                             <label for="passwordField" data-error="wrong" data-success="right">Password</label>
                         </div>
                         <!-- submit -->
-                        <button type="submit" class="btn deep-orange btn-rounded btn-block mt-4 mb-3">Log In</button>
+                        <button type="submit" class="btn btn-primary btn-rounded btn-block mt-4 mb-3">Log In</button>
                     </form>
                     <div>
                         Don't have an account? <a href="{{ url_for('register') }}">Sign up here</a>

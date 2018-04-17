@@ -3,7 +3,7 @@
 {% if session['username'] %}
 
     <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark deep-orange">
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
         <!--Brand is Lift-->
         <a class="navbar-brand" href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='assets/ic_launcher.png') }}" height="30" class="d-inline-block align-top" alt="">
@@ -33,7 +33,7 @@
 
             <form class="form-inline">
                 <div class="md-form mt-0">
-                    <input class="form-control mr-sm-2 input-cyan" type="text" placeholder="Search" aria-label="Search">
+                    <input class="form-control mr-sm-2 input-secondary" type="text" placeholder="Search" aria-label="Search">
                 </div>
             </form>
     </div>
