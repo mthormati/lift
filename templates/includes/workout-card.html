@@ -19,32 +19,18 @@
                 <!--Card image-->
                 <div class="form-check checkbox-rounded checkbox-success-filled">
                     <ul style="list-style-type: none">
-                        <li>
-                            <input type="checkbox" id="checkbox001" class="form-check-input">
-                            <label class="form-check-label" for="checkbox001">Barbell Deadlift    (4 Sets : 8 Reps)</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="checkbox002" class="form-check-input">
-                            <label class="form-check-label" for="checkbox002">Wide-grip Pulldown    (4 Sets : 10 Reps)</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="checkbox003" class="form-check-input">
-                            <label class="form-check-label" for="checkbox003">Rear Delt Flys    (3 Sets : 10 Reps)</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="checkbox004" class="form-check-input">
-                            <label class="form-check-label" for="checkbox004">Seated Rows    (4 Sets : 10 Reps)</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="checkbox005" class="form-check-input">
-                            <label class="form-check-label" for="checkbox005">Back Extention    (4 Sets : 10 Reps)</label>
-                        </li>
+                        {% for exercise in user_workout.exercises %}
+                            <li>
+                                <input type="checkbox" id="w{{ user_workout.relative_id }}e{{ exercise.relative_id }}" class="form-check-input">
+                                <label class="form-check-label" for="w{{ user_workout.relative_id }}e{{ exercise.relative_id }}">{{ exercise.title }} > {{ exercise.duration }}</label>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <!--Card content-->
                 <div class="card-body">
                     <!--Social meta-->
-                    <p>Here's a back workout!</p>
+                    <p> {{ user_workout.title }} </p>
                     <div class="social-meta d-flex justify-content-between">
                         <p><i class="fa fa-comment"></i>13 comments</p>
                         <p><i class="fa fa-heart-o"></i>25 likes</p>

@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from variables import *
+from workout import *
+from exercise import *
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import bcrypt
@@ -19,7 +21,34 @@ def index():
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
-    return render_template('discovery.html')
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    
+    #Retrieve user workout data from data base
+    mdb_workouts = mongo.db.workouts
+    mdb_exercises = mongo.db.exercises
+    mdb_user_workouts = user['user_workouts']
+
+    #Parse into readable object
+    user_workouts = []
+    workout_num = 0
+    for mdb_user_workout in mdb_user_workouts:
+        mdb_wo = mdb_workouts.find_one(mdb_user_workout)
+        #Parse exercies of workout
+        mdb_workout_exercises = mdb_wo['exercises']
+        workout_exercises = []
+        exercise_num = 0
+        for mdb_workout_exercise in mdb_workout_exercises:
+            mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
+            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], ++exercise_num))
+        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags'], ++workout_num))
+        
+    #Print object contents for testing
+    for user_workout in user_workouts:
+        print(user_workout.title)
+        for exercise in user_workout.exercises:
+            print(exercise.title)
+    return render_template('discovery.html', user_workouts=user_workouts)
 
 @app.route('/login', methods=['POST'])
 def login():

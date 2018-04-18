@@ -16,9 +16,9 @@
 		</label>
 	</div>
 	<!--/ Friend Discovery Radio Button -->
-
-	{% include 'includes/workout-card.html' %}
-	{% include 'includes/workout-card.html' %}
+	{% for user_workout in user_workouts %}
+		{% include 'includes/workout-card.html' %}
+	{% endfor %}
 
 </div>
 <!--/ Body of discovery page -->
