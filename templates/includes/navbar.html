@@ -1,0 +1,44 @@
+{% block body %}
+
+{% if session['username'] %}
+
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+        <!--Brand is Lift-->
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='assets/ic_launcher.png') }}" height="30" class="d-inline-block align-top" alt="">
+        </a>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+            <!-- Links -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('discovery') }}">
+                        Discovery
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+                </li>
+            </ul>
+
+            <form class="form-inline">
+                <div class="md-form mt-0">
+                    <input class="form-control mr-sm-2 input-secondary" type="text" placeholder="Search" aria-label="Search">
+                </div>
+            </form>
+    </div>
+</nav>
+
+{% endif %}
+
+{% endblock %}

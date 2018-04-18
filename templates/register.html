@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="background">
+    <div class="vertical-center">
+        <div class="container">
+            <div class="row m-4">
+                <div class="col-sm-6 offset-sm-3 card py-5 px-4 text-center">
+                    <form method=POST action="{{ url_for('register') }}" enctype="multipart/form-data">
+                        <img src="{{ url_for('static', filename='assets/ic_launcher_blue.png') }}" width="200" height="80" class="mb-3">
+                        <!-- display error message if necessary -->
+                        {% include 'includes/form-error.html' %}
+                        <!-- name -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="nameField" class="form-control input-secondary" name="name" required>
+                                <label for="nameField">Full Name</label>
+                            </div>
+                        </div>
+                        <!-- email -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="usernameField" class="form-control input-secondary" name="username" required>
+                                <label for="usernameField">Username</label>
+                            </div>
+                        </div>
+                        <!-- weight/height -->
+                        <div class="form-row">
+                            <div class="col-sm-6 md-form form-group">
+                                <input type="number" id="weightField" class="form-control input-secondary" name="weight" required>
+                                <label for="weightField">Weight (lbs)</label>
+                            </div>
+                            <div class="col-sm-6 md-form form-group">
+                                <input type="number" id="heightField" class="form-control input-secondary" name="height" required>
+                                <label for="heightField">Height (Inches)</label>
+                            </div>
+                        </div>
+                        <!-- experience -->
+                        <div class="form-row text-left my-4">
+                            <span class="col-sm-12 mb-4 color-grey">Current Experience Level: </span><br/>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expBeginner" value="beginner" checked>
+                                <label class="form-check-label color-grey radio-cyan" for="expBeginner">
+                                    Noob
+                                </label>
+                            </div>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expIntermediate" value="intermediate">
+                                <label class="form-check-label color-grey" for="expIntermediate">
+                                    Intermediate
+                                </label>
+                            </div>
+                            <div class="col-sm-4 form-check">
+                                <input class="form-check-input with-gap" type="radio" name="experience" id="expAdvanced" value="advanced">
+                                <label class="form-check-label color-grey" for="expAdvanced">
+                                    Ripped
+                                </label>
+                            </div>
+                        </div>
+                        <!-- password -->
+                        <div class="form-row">
+                            <div class="col md-form form-group">
+                                <input type="text" id="passwordField" class="form-control input-secondary" name="password" required>
+                                <label for="passwordField">Password</label>
+                            </div>
+                        </div>
+                        <!-- submit -->
+                        <button type="submit" class="btn btn-primary btn-rounded btn-block mt-4">Register</button>
+                        <a type="submit" class="btn btn-primary btn-rounded btn-block mt-4" href="{{ url_for('index') }}">Back to log in</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
