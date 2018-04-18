@@ -43,11 +43,6 @@ def discovery():
             workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], ++exercise_num))
         user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags'], ++workout_num))
         
-    #Print object contents for testing
-    for user_workout in user_workouts:
-        print(user_workout.title)
-        for exercise in user_workout.exercises:
-            print(exercise.title)
     return render_template('discovery.html', user_workouts=user_workouts)
 
 @app.route('/login', methods=['POST'])
