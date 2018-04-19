@@ -21,10 +21,11 @@
                     <ul style="list-style-type: none">
                         {% for exercise in user_workout.exercises %}
                             <li>
-                                <input type="checkbox" id="w{{ user_workout.relative_id }}e{{ exercise.relative_id }}" class="form-check-input">
-                                <label class="form-check-label" for="w{{ user_workout.relative_id }}e{{ exercise.relative_id }}">{{ exercise.title }} > {{ exercise.duration }}</label>
+                                <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input">
+                                <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
                             </li>
                         {% endfor %}
+
                     </ul>
                 </div>
                 <!--Card content-->

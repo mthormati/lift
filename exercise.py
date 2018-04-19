@@ -2,12 +2,12 @@ class Exercise(object):
 	title = ""
 	duration = ""
 	link = ""
-	relative_id = 0
+	key = ""
 
-def make_exercise(title, duration, link, relative_id):
+def make_exercise(title, duration, link, key):
 	exercise = Exercise()
 	exercise.title = title
 	exercise.duration = duration
 	exercise.link = link
-	exercise.relative_id = relative_id
+	exercise.key = key
 	return exercise

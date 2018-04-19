@@ -31,17 +31,19 @@ def discovery():
 
     #Parse into readable object
     user_workouts = []
-    workout_num = 0
+    workout_num = 1
     for mdb_user_workout in mdb_user_workouts:
         mdb_wo = mdb_workouts.find_one(mdb_user_workout)
         #Parse exercies of workout
         mdb_workout_exercises = mdb_wo['exercises']
         workout_exercises = []
-        exercise_num = 0
+        exercise_num = 1
         for mdb_workout_exercise in mdb_workout_exercises:
             mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
-            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], ++exercise_num))
-        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags'], ++workout_num))
+            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num)))
+            exercise_num+=1
+        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags']))
+        workout_num+=1
         
     return render_template('discovery.html', user_workouts=user_workouts)
 
