@@ -1,4 +1,5 @@
 class Workout(object):
+	#Need to add owner
 	title = ""
 	exercises = []
 	tags = []
