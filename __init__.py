@@ -13,23 +13,11 @@ app.config['MONGO_URI'] = database
 
 mongo = PyMongo(app)
 
-@app.route('/')
-def index():
-    if 'username' in session:
-        return render_template('home.html')
-    return render_template('index.html')
-
-@app.route('/discovery', methods=['GET'])
-def discovery():
-    users = mongo.db.users
-    user = users.find_one({'username': session['username']})
-    
-    #Retrieve user workout data from data base
+#Get user workouts parsed as a readable object
+def getUserWorkouts(user):
     mdb_workouts = mongo.db.workouts
     mdb_exercises = mongo.db.exercises
     mdb_user_workouts = user['user_workouts']
-
-    #Parse into readable object
     user_workouts = []
     workout_num = 1
     for mdb_user_workout in mdb_user_workouts:
@@ -44,7 +32,22 @@ def discovery():
             exercise_num+=1
         user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags']))
         workout_num+=1
-        
+    return user_workouts
+
+@app.route('/')
+def index():
+    if 'username' in session:
+        return render_template('home.html')
+    return render_template('index.html')
+
+@app.route('/discovery', methods=['GET'])
+def discovery():
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+
+    #Retrieve user workout data from data base
+    user_workouts = getUserWorkouts(user)
+
     return render_template('discovery.html', user_workouts=user_workouts)
 
 @app.route('/login', methods=['POST'])
@@ -78,7 +81,8 @@ def register():
                                 'name': request.form['name'],
                                 'weight': request.form['weight'],
                                 'height': request.form['height'],
-                                'experience': request.form['experience']})
+                                'experience': request.form['experience'],
+                                'user_workouts': []})
             session['username'] = request.form['username']
 
             return redirect(url_for('index'))
@@ -88,9 +92,13 @@ def register():
 
 @app.route('/profile', methods=['GET'])
 def profile():
+    #Get user
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
-    return render_template('profile.html', user=user)
+    #Get the user's workouts
+    user_workouts = getUserWorkouts(user)
+
+    return render_template('profile.html', user=user, user_workouts=user_workouts)
 
 if __name__ == '__main__':
     app.secret_key = key
