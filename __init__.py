@@ -100,6 +100,11 @@ def profile():
 
     return render_template('profile.html', user=user, user_workouts=user_workouts)
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.secret_key = key
     app.run(debug=True)
