@@ -3,16 +3,22 @@
 {% block body %}
 
 <div id="top-section" class="container">
+  <div class="fixed-action-btn" style="bottom: 115px; right: 400px;">
+      <a class="btn-floating btn-lg">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+      </div>
+  <div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 408px;">
+      <a href="#top-section" class="btn-floating btn-large">
+          <i class="fa fa-arrow-up"></i>
+      </a>
+  </div>
+
+  {% for user_workout in user_workouts %}
+      {% include 'includes/workout-card.html' %}
+  {% endfor %}
+
 
 </div>
-<div class="fixed-action-btn" style="bottom: 115px; right: 400px;">
-    <a class="btn-floating btn-lg">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-    </a>
-</div>
-<div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 408px;">
-    <a href="#top-section" class="btn-floating btn-large">
-        <i class="fa fa-arrow-up"></i>
-    </a>
-</div>
+
 {% endblock %}

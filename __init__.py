@@ -37,7 +37,13 @@ def getUserWorkouts(user):
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('home.html')
+        #Get user
+        users = mongo.db.users
+        user = users.find_one({'username': session['username']})
+        #Get the user's workouts
+        user_workouts = getUserWorkouts(user)
+
+        return render_template('home.html', user_workouts=user_workouts)
     return render_template('index.html')
 
 @app.route('/discovery', methods=['GET'])
