@@ -90,14 +90,30 @@ def register():
         return render_template('register.html', errorMessage=errorMessage)
     return render_template('register.html')
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET', 'POST'])
+#GET display profile
+#POST update profile information
 def profile():
     #Get user
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
+
+    if request.method == 'POST':
+        users.find_one_and_update(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'name': request.form['name'],
+                    'experience': request.form['experience'],
+                    'height': request.form['height'],
+                    'weight': request.form['weight']
+                }
+            }
+        )
+        return redirect(url_for('profile'))
+
     #Get the user's workouts
     user_workouts = getUserWorkouts(user)
-
     return render_template('profile.html', user=user, user_workouts=user_workouts)
 
 @app.route('/logout')
