@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <!--Grid row-->
+    {% for user in users %}
+      {% include 'includes/user-card.html' %}
+    {% endfor %}
+
+{% endblock %}

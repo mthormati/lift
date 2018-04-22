@@ -1,0 +1,29 @@
+{% block body %}
+  <!--Card-->
+  <div class="row m-0" style="display:inline-block;">
+    <div class="col-md-2"></div>
+      <div class="card" >
+          <!--Card image-->
+          <div class="card-body">
+              <div class="content">
+                <div style="display:inline-block;vertical-align:top;">
+                  <img class="rounded-circle avatar-img z-depth-1-half" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(17)-mini.jpg" alt="Card image cap">
+                </div>
+
+                <div style="display:inline-block;">
+                  {% if user.isFriend %}
+                    <a href="{{ url_for('addFriend', friend_user=user.objId) }}" class="btn btn-primary" ripple-radius>Follow</a>
+                  {% endif %}
+                  {% if not user.isFriend %}
+                    <a href="#" type="button" class="btn btn-primary" disabled>Following</a>
+                  {% endif %}
+                </div>
+              </div>
+              <h4>{{ user.name }}</h4>
+          </div>
+
+
+      </div>
+   </div>
+   <!--/.Card-->
+ {% endblock %}

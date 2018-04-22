@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, session, redirect
 from variables import *
 from workout import *
 from exercise import *
+from search import *
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import bcrypt
@@ -34,6 +35,14 @@ def getUserWorkouts(user):
         workout_num+=1
     return user_workouts
 
+#Add friend
+@app.route('/search/<ObjectId:friend_user>')
+def addFriend(friend_user):
+    users = mongo.db.users
+    users.update( { 'username': session['username'] }, {"$push": {'user_friends': friend_user}} )
+    return discovery()
+
+
 @app.route('/')
 def index():
     if 'username' in session:
@@ -44,11 +53,21 @@ def index():
 def discovery():
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
-
+    friend_discovery_workouts = []
+    for friend in user['user_friends']:
+        friend_workouts = getUserWorkouts(users.find_one( {'_id': friend} ))
+        for fwo in friend_workouts:
+            friend_discovery_workouts.append(fwo)
     #Retrieve user workout data from data base
-    user_workouts = getUserWorkouts(user)
+    return render_template('discovery.html', user_workouts=friend_discovery_workouts)
 
-    return render_template('discovery.html', user_workouts=user_workouts)
+@app.route('/search', methods=['POST'])
+def search():
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    search = request.form['search']
+    results = searchQuery(search, mongo, user)
+    return render_template('search.html', users=results.users)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -82,7 +101,8 @@ def register():
                                 'weight': request.form['weight'],
                                 'height': request.form['height'],
                                 'experience': request.form['experience'],
-                                'user_workouts': []})
+                                'user_workouts': [],
+                                'user_friends': []})
             session['username'] = request.form['username']
 
             return redirect(url_for('index'))
