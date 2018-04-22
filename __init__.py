@@ -1,11 +1,12 @@
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, session, redirect, send_file
 from variables import *
 from workout import *
 from exercise import *
 from search import *
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-import bcrypt
+import bcrypt, os
+import codecs
 import random
 
 app = Flask(__name__)
@@ -33,8 +34,25 @@ def parseWorkouts(mdb_user_workouts, name):
         exercise_num = 1
         for mdb_workout_exercise in mdb_workout_exercises:
             mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
-            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num)))
+            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num), mdb_ex['_id']))
             exercise_num+=1
+        user_workouts.append(make_workout(mdb_wo['title'], name, workout_exercises, mdb_wo['tags'], mdb_wo['_id']))
+        workout_num+=1
+    return user_workouts
+
+#Takes in a user as a param
+#Returns the data for the image of the profile picture
+#Store return value in variable and pass it to template
+def getProfilePicture(user):
+    fileCollection = mongo.db['fs.files']
+    existingFile = fileCollection.find_one({'filename': user['username']})
+    image = None
+    if existingFile is not  None:
+        file_data = mongo.send_file(user['username'])
+        file_data.direct_passthrough = False
+        base64_data = codecs.encode(file_data.data, 'base64')
+        image = base64_data.decode('utf-8')
+    return image
         user_workouts.append(make_workout(mdb_user_workout, mdb_wo['title'], name, workout_exercises, mdb_wo['tags']))
         workout_num+=1
     return user_workouts
@@ -126,15 +144,67 @@ def register():
         return render_template('register.html', errorMessage=errorMessage)
     return render_template('register.html')
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET', 'POST'])
+#GET display profile
+#POST update profile information
+
+#TODO: split workouts into active and completed workouts
+#Display only completed workouts in profile
+#Add option to move workout back to active
+
 def profile():
     #Get user
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
+    image = getProfilePicture(user)
+
+    if request.method == 'POST':
+        users.find_one_and_update(
+            {'_id': user['_id']},
+            {
+                '$set': {
+                    'name': request.form['name'],
+                    'experience': request.form['experience'],
+                    'height': request.form['height'],
+                    'weight': request.form['weight']
+                }
+            }
+        )
+
+        #Handle file uploading
+        if len(request.files) != 0:
+            #Check if user has already uploaded a profile photo
+            files = mongo.db['fs.files']
+            file = files.find_one({'filename': user['username']})
+
+            #Delete current profile image
+            if file is not None:
+                fileChunks = mongo.db['fs.chunks']
+                files.delete_one({'_id': file['_id']})
+                fileChunks.delete_one({'files_id': file['_id']})
+
+            #Store profile image
+            file = request.files['inputFile']
+            mongo.save_file(user['username'], file)
+
+        return redirect(url_for('profile'))
+
     #Get the user's workouts
     user_workouts = getUserWorkouts(user)
+    return render_template('profile.html', user=user, user_workouts=user_workouts, image_data=image)
 
-    return render_template('profile.html', user=user, user_workouts=user_workouts)
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
+
+@app.route('/handleCheck', methods=['POST'])
+def handleCheck():
+    #Get workoutId use request.json['workoutId']
+    #Get exerciseId user request.json['exerciseId']
+    #Get checked status (boolean) of checkbox use request.json['checked']
+    print(request.json['checked'])
+    return ''
 
 if __name__ == '__main__':
     app.secret_key = key

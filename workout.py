@@ -1,17 +1,17 @@
 class Workout(object):
-	#Need to add owner
-	title = ""
-	owner = ""
-	exercises = []
-	tags = []
+    title = ""
+    exercises = []
+    tags = []
+    _id = ""
+    owner = ""
 
 
-def make_workout(id, title, owner, exercises, tags):
-	workout = Workout()
-	workout.id = id
-	workout.title = title
+def make_workout(title, owner, exercises, tags, _id):
+    workout = Workout()
+    workout.title = title
+    workout.exercises = exercises
+    workout.tags = tags
 	workout.owner = owner
-	workout.exercises = exercises
-	workout.tags = tags
+    workout._id = _id
 
-	return workout
+    return workout
