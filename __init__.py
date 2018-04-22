@@ -60,7 +60,9 @@ def addworkout():
     }
     workid = workoutlist.insert(addw)
     users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid}})
-    return redirect(url_for('profile'))
+    return redirect(url_for('index'))
+
+
 
 @app.route('/discovery', methods=['GET'])
 def discovery():

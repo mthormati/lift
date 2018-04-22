@@ -1,0 +1,51 @@
+{% block body %}
+<!--Section: Social news card-->
+<section class="pt-5 pb-3">
+    <!--Grid row-->
+    <div class="row m-0" >
+        <!--Grid column-->
+        <div class="col-md-2"></div>
+        <div class="col-md-2 col-lg-8">
+            <!--Card-->
+            <div class="card news-card">
+                <!--Heading-->
+                <div class="card-body">
+                    <div class="content">
+                        <div class="right-side-meta"><i class="fa fa-bookmark-o"></i></div>
+
+                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(17)-mini.jpg" class="rounded-circle avatar-img z-depth-1-half">Kate
+                    </div>
+                </div>
+                <!--Card image-->
+                <div class="form-check checkbox-rounded checkbox-success-filled">
+                    <ul style="list-style-type: none">
+                        {% for exercise in user_workout.exercises %}
+                            <li>
+                                <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input">
+                                <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <!--Card content-->
+                <div class="card-body">
+                    <!--Social meta-->
+                    <div class="totheright" data-toggle="modal" data-target="#modalexercise">
+                      <p><i class="fa fa-plus btn-blue waves-effect"></i> Add Exercise</p>
+                    </div>
+
+                    <p> {{ user_workout.title }} </p>
+                </div>
+                <!--Card content-->
+                {% include 'includes/add-exercise.html' %}
+            </div>
+            <!--Card-->
+        </div>
+        <!--Grid column-->
+    </div>
+    <!--Grid row-->
+</section>
+<!--Section: Social news card-->
+
+{% endblock %}

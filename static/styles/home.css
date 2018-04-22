@@ -1,83 +1,86 @@
 
-  .add-button
-  {
-    position:fixed;
-    z-index:998;
-    right:35px;
-    bottom:35px;
-    margin-bottom:0;
-    padding-top:15px
+.add-button
+{
+  position:fixed;
+  z-index:998;
+  right:35px;
+  bottom:35px;
+  margin-bottom:0;
+  padding-top:15px
 
-  }
+}
 
-  .modal-notify .modal-header {
-      border-radius: 3px 3px 0 0;
-  }
-  .modal-notify .modal-content {
-      border-radius: 3px;
-  }
+.totheright{
+  text-align: right;
+}
+.modal-notify .modal-header {
+    border-radius: 3px 3px 0 0;
+}
+.modal-notify .modal-content {
+    border-radius: 3px;
+}
 
-  a.midd {
+a.midd {
+  text-align: center;
+  cursor: default;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 1;
+}
+
+.fa-heart-o {
+    cursor: pointer;
+    display: inline-block;
+    font: normal normal normal 20px/1 FontAwesome;
+    font-size: 25px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: rgba(0,0,0,.4);
+    -webkit-transition: .30s;
+    transition: .30s;
+    float: inherit;
+}
+
+.fa-heart-o:hover {
+    color: #ee6da8;
+}
+
+a.waves-effect, a.waves-light {
+    display: inline-block;
+}
+.btn-floating i {
+    display: inline-block;
+    width: inherit;
     text-align: center;
-    cursor: default;
-    font-size: 20px;
-    font-weight: bold;
-  }
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 47px;
+}
 
-  .waves-effect {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 1;
-  }
-
-  .fa-heart-o {
-      cursor: pointer;
-      display: inline-block;
-      font: normal normal normal 20px/1 FontAwesome;
-      font-size: 25px;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: rgba(0,0,0,.4);
-      -webkit-transition: .30s;
-      transition: .30s;
-      float: inherit;
-  }
-
-  .fa-heart-o:hover {
-      color: #ee6da8;
-  }
-
-  a.waves-effect, a.waves-light {
-      display: inline-block;
-  }
-  .btn-floating i {
-      display: inline-block;
-      width: inherit;
-      text-align: center;
-      color: #fff;
-      font-size: 1.25rem;
-      line-height: 47px;
-  }
-
-  .btn-floating {
-      width: 47px;
-      height: 47px;
-      position: relative;
-      z-index: 1;
-      vertical-align: middle;
-      display: inline-block;
-      overflow: hidden;
-      -webkit-transition: all .2s ease-in-out;
-      transition: all .2s ease-in-out;
-      margin: 10px;
-      border-radius: 50%;
-      padding: 0;
-      cursor: pointer;
-  }
+.btn-floating {
+    width: 47px;
+    height: 47px;
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    margin: 10px;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+}
