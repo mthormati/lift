@@ -34,10 +34,8 @@
                 </li>
             </ul>
 
-            <form class="form-inline">
-                <div class="md-form mt-0">
-                    <input class="form-control mr-sm-2 input-secondary" type="text" placeholder="Search" aria-label="Search">
-                </div>
+            <form method=POST action="{{ url_for('search') }}" class="form-inline">
+                <input class="form-control mr-sm-2 input-secondary" type="text" name="search" placeholder="Search" aria-label="Search">
             </form>
     </div>
 </nav>

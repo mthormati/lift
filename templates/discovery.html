@@ -3,24 +3,39 @@
 {% block body %}
 
 <!-- Body of discovery page -->
-<div class="container" style="padding-top:30px;padding-bottom: 30px">
-	<!-- Friend Discovery Radio Button -->
-	<div class="btn-group" data-toggle="buttons" style="width:100%;">
-		<label class="btn btn-primary btn-block active">
-			<input type="radio" name="Friends" id="friends" autocomplete="off" checked>
-			Friends
-		</label>
-		<label class="btn btn-primary btn-block">
-			<input type="radio" name="Discovery" id="discovery" autocomplete="off">
-			Discovery
-		</label>
-	</div>
-	<!--/ Friend Discovery Radio Button -->
-	{% for user_workout in user_workouts %}
-		{% include 'includes/workout-card.html' %}
-	{% endfor %}
 
+<div class="container expanded">
+    <div class="col mt-4">
+			<div>
+					<div class="header primary-color text-center py-3">Friend Workouts</div>
+					<div class="card edge-top">
+
+						{% for user_workout in user_workouts %}
+							{% include 'includes/workout-card.html' %}
+						{% endfor %}
+
+					</div>
+			</div>
+			<hr>
+			<div id="discovery">
+					<div class="header primary-color text-center py-3">Discovery Workouts</div>
+					<div class="card edge-top">
+
+						{% for user_workout in discovery_workouts %}
+							{% include 'includes/workout-card.html' %}
+						{% endfor %}
+
+					</div>
+			</div>
+	</div>
 </div>
+
+<div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;">
+    <a href="#discovery" class="btn-floating btn-large blue">
+        <i class="fa fa-map-signs" aria-hidden="true"></i>
+    </a>
+</div>
+
 <!--/ Body of discovery page -->
 
 {% endblock %}
