@@ -15,9 +15,9 @@
                     <div class="content">
                         <div style="display:inline-block;vertical-align:top;">
                             {% if image_data != None %}
-                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">Kate
+                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">
                             {% else %}
-                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">Kate
+                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">
                             {% endif %}
                         </div>
                         <div style="display:inline-block;">
