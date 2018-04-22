@@ -3,7 +3,11 @@ from variables import *
 from workout import *
 from exercise import *
 from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from bson.objectid import ObjectId
+from werkzeug.routing import BaseConverter, ValidationError
+from itsdangerous import base64_encode, base64_decode
+from bson.errors import InvalidId
 import bcrypt
 
 app = Flask(__name__)
@@ -28,9 +32,9 @@ def getUserWorkouts(user):
         exercise_num = 1
         for mdb_workout_exercise in mdb_workout_exercises:
             mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
-            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num)))
+            workout_exercises.append(make_exercise(mdb_ex['_id'], mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num)))
             exercise_num+=1
-        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags']))
+        user_workouts.append(make_workout(mdb_wo['_id'] ,mdb_wo['title'], workout_exercises, mdb_wo['tags']))
         workout_num+=1
     return user_workouts
 
@@ -41,6 +45,7 @@ def index():
         users = mongo.db.users
         user = users.find_one({'username': session['username']})
         #Get the user's workouts
+        #mdb_user_workouts = user['user_workouts']
         user_workouts = getUserWorkouts(user)
         return render_template('home.html', user_workouts=user_workouts)
     return render_template('index.html')
@@ -62,7 +67,26 @@ def addworkout():
     users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid}})
     return redirect(url_for('index'))
 
+@app.route('/addexercise', methods=['GET','POST'])
+def addexercise():
+    if request.method == 'POST':
+        users = mongo.db.users
+        user = users.find_one({'username': session['username']})
 
+        #Retrieve user workout data from data base
+        #mdb_user_workouts = user['user_workouts']
+        exerciselist = mongo.db.exercises
+        workoutlist = mongo.db.workouts
+        adde = {
+            'title' : request.form['title'],
+            'duration' : request.form['duration'],
+            'link' : request.form['link']
+            }
+        exerciseid = exerciselist.insert(adde)
+    #curwork = request.args.get('iid', None)
+    #workoutlist.update({'_id': curwork}, { "$push":{ 'exercises' : exerciseid}})
+        return redirect(url_for('index'))
+    return render_template('addexercise.html')
 
 @app.route('/discovery', methods=['GET'])
 def discovery():

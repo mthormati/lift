@@ -31,14 +31,15 @@
                 <!--Card content-->
                 <div class="card-body">
                     <!--Social meta-->
-                    <div class="totheright" data-toggle="modal" data-target="#modalexercise">
-                      <p><i class="fa fa-plus btn-blue waves-effect"></i> Add Exercise</p>
-                    </div>
+                    <input type="text" name="_id" value="{{ user_workout._id }}">
+
+                      {% set workid = user_workout._id %}
+                      <a><i class="fa fa-plus btn-blue waves-effect" href="{{ url_for('addexercise') }}"></i> Add Exercise</a>
+
 
                     <p> {{ user_workout.title }} </p>
                 </div>
                 <!--Card content-->
-                {% include 'includes/add-exercise.html' %}
             </div>
             <!--Card-->
         </div>
