@@ -5,5 +5,9 @@
     {% for user in users %}
       {% include 'includes/user-card.html' %}
     {% endfor %}
+    <hr>
+    {% for user_workout in workouts %}
+      {% include 'includes/workout-card.html' %}
+    {% endfor %}
 
 {% endblock %}

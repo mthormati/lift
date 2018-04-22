@@ -4,21 +4,12 @@
 
 <!-- Body of discovery page -->
 <div class="container" style="padding-top:30px;padding-bottom: 30px">
-	<!-- Friend Discovery Radio Button -->
-	<div class="btn-group" data-toggle="buttons" style="width:100%;">
-		<label class="btn btn-primary btn-block active">
-			<input type="radio" name="Friends" id="friends" autocomplete="off" checked>
-			Friends
-		</label>
-		<label class="btn btn-primary btn-block">
-			<input type="radio" name="Discovery" id="discovery" autocomplete="off">
-			Discovery
-		</label>
-	</div>
-	<!--/ Friend Discovery Radio Button -->
+
 	{% for user_workout in user_workouts %}
 		{% include 'includes/workout-card.html' %}
 	{% endfor %}
+
+	<!-- Find similar users and show their workouts -->
 
 </div>
 <!--/ Body of discovery page -->
