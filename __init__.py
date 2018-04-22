@@ -163,7 +163,7 @@ def logout():
 def handleCheck():
     #Get workoutId use request.json['workoutId']
     #Get exerciseId user request.json['exerciseId']
-    #Get checked status of checkbox use request.json['checked']
+    #Get checked status (boolean) of checkbox use request.json['checked']
     print(request.json['checked'])
     return ''
 
