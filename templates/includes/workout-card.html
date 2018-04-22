@@ -13,7 +13,11 @@
                     <div class="content">
                         <div class="right-side-meta"><i class="fa fa-bookmark-o"></i></div>
 
-                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(17)-mini.jpg" class="rounded-circle avatar-img z-depth-1-half">Kate
+                        {% if image_data != None %}
+                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">Kate
+                        {% else %}
+                            <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">Kate
+                        {% endif %}
                     </div>
                 </div>
                 <!--Card image-->
