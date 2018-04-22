@@ -9,39 +9,43 @@
             <!--Card-->
             <div class="card news-card">
                 <!--Heading-->
+                <!--Card content-->
                 <div class="card-body">
+                    <!--Social meta-->
                     <div class="content">
-                        <div class="right-side-meta"><i class="fa fa-bookmark-o"></i></div>
+                        <div style="display:inline-block;vertical-align:top;">
+                            {% if image_data != None %}
+                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">
+                            {% endif %}
+                        </div>
+                        <div style="display:inline-block;">
+                          <p> {{ user_workout.owner }} </p>
+                          <h4> {{ user_workout.title }} </h4>
+                        </div>
+                        <div style="display:inline-block;" class="float-right">
 
-                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(17)-mini.jpg" class="rounded-circle avatar-img z-depth-1-half">Kate
+                          <a href="{{ url_for('saveWorkout', workout=user_workout.id) }}" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+                        </div>
                     </div>
+
                 </div>
                 <!--Card image-->
                 <div class="form-check checkbox-rounded checkbox-success-filled">
                     <ul style="list-style-type: none">
                         {% for exercise in user_workout.exercises %}
                             <li>
-                                <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input">
+                                <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input"
+                                data-workout="{{ user_workout['_id'] }}" data-exercise="{{ exercise['_id'] }}">
                                 <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
                             </li>
                         {% endfor %}
-
                     </ul>
                 </div>
-                <!--Card content-->
+
                 <div class="card-body">
-                    <!--Social meta-->
-                    <p> {{ user_workout.title }} </p>
-                    <div class="social-meta d-flex justify-content-between">
-                        <p><i class="fa fa-comment"></i>13 comments</p>
-                        <p><i class="fa fa-heart-o"></i>25 likes</p>
-                    </div>
-                    <hr>
-                    <!--Comment input-->
-                    <div class="md-form">
-                        <i class="fa fa-heart-o prefix"></i>
-                        <input placeholder="Add Comment..." type="text" id="form5" class="form-control input-secondary">
-                    </div>
+
                 </div>
                 <!--Card content-->
             </div>

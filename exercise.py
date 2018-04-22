@@ -1,15 +1,15 @@
 class Exercise(object):
-	_id = ""
-	title = ""
-	duration = ""
-	link = ""
-	key = ""
+    title = ""
+    duration = ""
+    link = ""
+    key = ""
+    _id = ""
 
-def make_exercise(_id, title, duration, link, key):
-	exercise = Exercise()
-	exercise._id = _id
-	exercise.title = title
-	exercise.duration = duration
-	exercise.link = link
-	exercise.key = key
-	return exercise
+def make_exercise(title, duration, link, key, _id):
+    exercise = Exercise()
+    exercise.title = title
+    exercise.duration = duration
+    exercise.link = link
+    exercise.key = key
+    exercise._id = _id
+    return exercise

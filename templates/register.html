@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row m-4">
                 <div class="col-sm-6 offset-sm-3 card py-5 px-4 text-center">
-                    <form method=POST action="{{ url_for('register') }}" enctype="multipart/form-data">
+                    <form method=POST action="{{ url_for('register') }}">
                         <img src="{{ url_for('static', filename='assets/ic_launcher_blue.png') }}" width="200" height="80" class="mb-3">
                         <!-- display error message if necessary -->
                         {% include 'includes/form-error.html' %}
