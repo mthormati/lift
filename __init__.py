@@ -6,6 +6,7 @@ from search import *
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import bcrypt
+import random
 
 app = Flask(__name__)
 
@@ -67,8 +68,14 @@ def discovery():
         friend_workouts = getUserWorkouts(users.find_one( {'_id': friend} ))
         for fwo in friend_workouts:
             friend_discovery_workouts.append(fwo)
+    other_discovery_workouts = []
+    db_workouts = []
+    for workout in mongo.db.workouts.find():
+        db_workouts.append(workout)
+    other_discovery_workouts = parseWorkouts(db_workouts, "Lift Discovery")
+    random.shuffle(other_discovery_workouts)
     #Retrieve user workout data from data base
-    return render_template('discovery.html', user_workouts=friend_discovery_workouts)
+    return render_template('discovery.html', user_workouts=friend_discovery_workouts, discovery_workouts=other_discovery_workouts)
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -76,7 +83,7 @@ def search():
     user = users.find_one({'username': session['username']})
     search = request.form['search']
     results = searchQuery(search, mongo, user)
-    return render_template('search.html', users=results.users, workouts=parseWorkouts(results.workouts))
+    return render_template('search.html', users=results.users, workouts=parseWorkouts(results.workouts, "Lift Workouts"))
 
 @app.route('/login', methods=['POST'])
 def login():
