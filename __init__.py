@@ -53,9 +53,6 @@ def getProfilePicture(user):
         base64_data = codecs.encode(file_data.data, 'base64')
         image = base64_data.decode('utf-8')
     return image
-        user_workouts.append(make_workout(mdb_user_workout, mdb_wo['title'], name, workout_exercises, mdb_wo['tags']))
-        workout_num+=1
-    return user_workouts
 
 #Add friend
 @app.route('/search/<ObjectId:friend_user>')
