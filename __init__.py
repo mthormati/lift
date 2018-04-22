@@ -34,7 +34,7 @@ def getUserWorkouts(user):
         workout_num+=1
     return user_workouts
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     if 'username' in session:
         #Get user
@@ -42,9 +42,25 @@ def index():
         user = users.find_one({'username': session['username']})
         #Get the user's workouts
         user_workouts = getUserWorkouts(user)
-
         return render_template('home.html', user_workouts=user_workouts)
     return render_template('index.html')
+
+@app.route('/addworkout',  methods=['POST'])
+def addworkout():
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+
+    #Retrieve user workout data from data base
+    mdb_user_workouts = user['user_workouts']
+    workoutlist = mongo.db.workouts
+    addw = {
+        'title' : request.form['title'],
+        'exercises' : [],
+        'tags' : []
+    }
+    workid = workoutlist.insert(addw)
+    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid}})
+    return redirect(url_for('profile'))
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
