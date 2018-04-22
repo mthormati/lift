@@ -29,9 +29,9 @@ def getUserWorkouts(user):
         exercise_num = 1
         for mdb_workout_exercise in mdb_workout_exercises:
             mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
-            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num)))
+            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num), mdb_ex['_id']))
             exercise_num+=1
-        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags']))
+        user_workouts.append(make_workout(mdb_wo['title'], workout_exercises, mdb_wo['tags'], mdb_wo['_id']))
         workout_num+=1
     return user_workouts
 
@@ -158,6 +158,14 @@ def profile():
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
+@app.route('/handleCheck', methods=['POST'])
+def handleCheck():
+    #Get workoutId use request.json['workoutId']
+    #Get exerciseId user request.json['exerciseId']
+    #Get checked status of checkbox use request.json['checked']
+    print(request.json['checked'])
+    return ''
 
 if __name__ == '__main__':
     app.secret_key = key
