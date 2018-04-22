@@ -1,5 +1,5 @@
 $('input[type="checkbox"]').on('click', (event) => {
-    url = 'http://localhost:5000/handleCheck'
+    url = '/handleCheck'
     data = {
         'workoutId': event.target.dataset.workout,
         'exerciseId': event.target.dataset.exercise,
