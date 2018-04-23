@@ -1,65 +1,42 @@
-{% extends 'layout.html' %}
 {% block body %}
+<div class="modal fade" id="modalexercise" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notify" role="document">
+        <div class="modal-content">
+          <form  method=POST action="{{ url_for('addexercise', iid=user_workout['_id'] ) }}">
+            <input type="text" name="_id" value="{{ workid }}">
+            <div class="modal-header text-center btn-blue">
+                <h4 class="modal-title w-100 font-weight-bold">Exercise</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
-<!--Section: Contact v.1-->
-<section class="py-3">
-    <div class="row">
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                    <i class="fa fa-pencil prefix grey-text"></i>
+                    <input type="text" class="form-control" name="title" required>
+                    <label for="title">Exercise Title</label>
+                </div>
 
-        <!--Grid column-->
-        <div class="col-lg-5 mb-4">
-          <form method=POST action="">
-            <!--Form with header-->
-            <div class="card">
+                <div class="md-form mb-5">
+                    <i class="fa fa-refresh prefix grey-text"></i>
+                    <input type="text" class="form-control" name="duration" required>
+                    <label for="duration">Duration</label>
+                </div>
 
-                <div class="card-body">
-                    <!--Header-->
-                    <div class="form-header blue accent-1">
-                        <h3>
-                            <i class="fa fa-envelope"></i>Exercise</h3>
-                    </div>
-
-                    <p>We'll write rarely, but only the best content.</p>
-                    <br>
-
-                    <!--Body-->
-                    <div class="md-form">
-                        <i class="fa fa-pencil prefix grey-text"></i>
-                        <input type="text" class="form-control" name="title" required>
-                        <label for="title">Exercise Title</label>
-                    </div>
-
-                    <div class="md-form">
-                        <i class="fa fa-refresh prefix grey-text"></i>
-                        <input type="text" class="form-control" name="duration" required>
-                        <label for="duration">Duration</label>
-                    </div>
-
-                    <div class="md-form">
-                        <i class="fa fa-link prefix grey-text"></i>
-                        <input type="text" class="form-control" name="link">
-                        <label for="link">Link</label>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-light-blue">Submit</button>
-                    </div>
-
+                <div class="md-form mb-5">
+                    <i class="fa fa-link prefix grey-text"></i>
+                    <input type="text" class="form-control" name="link">
+                    <label for="link">Link</label>
                 </div>
 
             </div>
-            <!--Form with header-->
-
+            <div class="modal-footer d-flex justify-content-center">
+                <!--button class="btn btn-blue">Add Exercise <i class="fa fa-plus ml-1"></i></button-->
+                  <button type="submit" class="btn btn-blue">Add Exercise</button>
+            </div>
         </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-7">
-
-        </div>
-        <!--Grid column-->
-
     </div>
+</div>
 
-</section>
-<!--Section: Contact v.1-->
 {% endblock %}
