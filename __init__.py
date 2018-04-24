@@ -63,10 +63,26 @@ def getProfilePicture(user):
     return image
 
 #Add friend
-@app.route('/search/<ObjectId:friend_user>')
+@app.route('/search/add/<ObjectId:friend_user>', methods=['POST'])
 def addFriend(friend_user):
     users = mongo.db.users
     users.update( { 'username': session['username'] }, {"$push": {'user_friends': friend_user}} )
+    return discovery()
+
+@app.route('/search/remove/<ObjectId:friend_user>', methods=['POST'])
+def removeFriend(friend_user):
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    #Find index of friend in user_friends
+    for index, friend in enumerate(user['user_friends']):
+        if friend == friend_user:
+            friend_index = index
+            break
+    #Remove friend from user_friends
+    key = 'user_friends.' + str(friend_index)
+    users.find_one_and_update({ 'username': session['username'] }, { '$unset' : { key : 1 } })
+    users.find_one_and_update({ 'username': session['username'] }, { '$pull' : { 'user_friends' : None } })
+
     return discovery()
 
 #Save workout (from friends/discovery)
