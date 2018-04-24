@@ -6,24 +6,30 @@
           <!--Card image-->
           <div class="card-body">
               <div class="content">
-                <div style="display:inline-block;vertical-align:top;">
+                <div class="d-flex justify-content-start">
                     {% if user.image_data != None %}
                         <img src="data:image/png;base64,{{user.image_data}}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
+                        <h4>{{ user.name }}</h4>
                     {% else %}
                         <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
+                        <h4>{{ user.name }}</h4>
                     {% endif %}
                 </div>
 
+
                 <div style="display:inline-block;">
-                  {% if user.isFriend %}
-                    <a href="{{ url_for('addFriend', friend_user=user.objId) }}" class="btn btn-primary" ripple-radius>Follow</a>
-                  {% endif %}
-                  {% if not user.isFriend %}
-                    <a href="#" type="button" class="btn btn-primary" disabled>Following</a>
-                  {% endif %}
+                    {% if user.isFriend %}
+                        <form action="{{ url_for('addFriend', friend_user=user.objId) }}" method=POST>
+                            <button type="submit" class="btn btn-primary" ripple-radius>Follow</button>
+                        </form>
+                    {% endif %}
+                    {% if not user.isFriend %}
+                        <form action="{{ url_for('removeFriend', friend_user=user.objId) }}" method=POST>
+                            <button type="submit" class="btn btn-danger" ripple-radius>Unfollow</button>
+                        </form>
+                    {% endif %}
                 </div>
               </div>
-              <h4>{{ user.name }}</h4>
           </div>
 
 
