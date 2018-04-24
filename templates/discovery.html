@@ -3,9 +3,9 @@
 {% block body %}
 
 <!-- Body of discovery page -->
-
 <div class="container expanded">
     <div class="col mt-4">
+      <!-- Friend workout section -->
 			<div>
 					<div class="header primary-color text-center py-3">Friend Workouts</div>
 					<div class="card edge-top">
@@ -17,6 +17,7 @@
 					</div>
 			</div>
 			<hr>
+      <!-- Discovery workout section -->
 			<div id="discovery">
 					<div class="header primary-color text-center py-3">Discovery Workouts</div>
 					<div class="card edge-top">
@@ -30,12 +31,11 @@
 	</div>
 </div>
 
+<!-- FAB for autoscroll to disvoery section -->
 <div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;">
     <a href="#discovery" class="btn-floating btn-large blue">
         <i class="fa fa-map-signs" aria-hidden="true"></i>
     </a>
 </div>
-
-<!--/ Body of discovery page -->
 
 {% endblock %}

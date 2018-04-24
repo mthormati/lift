@@ -16,11 +16,12 @@ app.config['MONGO_URI'] = database
 
 mongo = PyMongo(app)
 
-#Get user workouts parsed as a readable object
+#Get user's workouts parsed as a readable object
 def getUserWorkouts(user):
     mdb_user_workouts = user['user_workouts']
     return parseWorkouts(mdb_user_workouts, user['name'])
 
+#Parses workouts under a given name from the specified array of objectId's
 def parseWorkouts(mdb_user_workouts, name):
     mdb_workouts = mongo.db.workouts
     mdb_exercises = mongo.db.exercises
@@ -92,6 +93,7 @@ def discovery():
     #Retrieve user workout data from data base
     return render_template('discovery.html', user_workouts=friend_discovery_workouts, discovery_workouts=other_discovery_workouts)
 
+#Uses "wildcard + query + wildcard" for search
 @app.route('/search', methods=['POST'])
 def search():
     users = mongo.db.users
