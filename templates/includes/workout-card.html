@@ -14,10 +14,10 @@
                     <!--Social meta-->
                     <div class="content">
                         <div style="display:inline-block;vertical-align:top;">
-                            {% if image_data != None %}
-                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">
+                            {% if user_workout.image_data != None %}
+                                <img src="data:image/png;base64,{{user_workout.image_data}}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
                             {% else %}
-                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">
+                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
                             {% endif %}
                         </div>
                         <div style="display:inline-block;">
@@ -26,7 +26,7 @@
                         </div>
                         <div style="display:inline-block;" class="float-right">
 
-                          <a href="{{ url_for('saveWorkout', workout=user_workout.id) }}" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+                          <a href="{{ url_for('saveWorkout', workout=user_workout._id) }}" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
                         </div>
                     </div>
 
