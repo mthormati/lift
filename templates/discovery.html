@@ -2,17 +2,49 @@
 
 {% block body %}
 
+<!-- Nav tabs -->
+<ul id="navbar" class="nav nav-tabs nav-justified primary-color mx-5 mt-5 mb-0" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel5" role="tab">
+            Friend's Workouts
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#panel6" role="tab">
+            Discovery Workouts
+        </a>
+    </li>
+</ul>
+    <!-- Nav tabs -->
+    <!-- Tab panels -->
+<div class="tab-content">
+    <!--Panel 1-->
+    <div class="tab-pane fade in show active" id="panel5" role="tabpanel">
+        {% for user_workout in user_workouts %}
+            {% include 'includes/workout-card.html' %}
+        {% endfor %}
+    </div>
+    <!--/.Panel 1-->
+    <!--Panel 2-->
+    <div class="tab-pane fade" id="panel6" role="tabpanel">
+        {% for user_workout in discovery_workouts %}
+            {% include 'includes/workout-card.html' %}
+        {% endfor %}
+    </div>
+    <!--/.Panel 2-->
+</div>
+<!-- Tab panels -->
+
+
 <!-- Body of discovery page -->
 
-<div class="container expanded">
+<!-- <div class="container expanded">
     <div class="col mt-4">
 			<div>
 					<div class="header primary-color text-center py-3">Friend Workouts</div>
 					<div class="card edge-top">
 
-						{% for user_workout in user_workouts %}
-							{% include 'includes/workout-card.html' %}
-						{% endfor %}
+
 
 					</div>
 			</div>
@@ -21,18 +53,16 @@
 					<div class="header primary-color text-center py-3">Discovery Workouts</div>
 					<div class="card edge-top">
 
-						{% for user_workout in discovery_workouts %}
-							{% include 'includes/workout-card.html' %}
-						{% endfor %}
+
 
 					</div>
 			</div>
 	</div>
-</div>
+</div> -->
 
 <div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;">
-    <a href="#discovery" class="btn-floating btn-large blue">
-        <i class="fa fa-map-signs" aria-hidden="true"></i>
+    <a href="#top-navbar" class="btn-floating btn-large blue">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
     </a>
 </div>
 
