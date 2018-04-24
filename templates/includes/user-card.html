@@ -1,13 +1,17 @@
 {% block body %}
   <!--Card-->
-  <div class="row m-0" style="display:inline-block;">
+  <div class="row m-4" style="display:inline-block;">
     <div class="col-md-2"></div>
-      <div class="card" >
+      <div class="card news-card" >
           <!--Card image-->
           <div class="card-body">
               <div class="content">
                 <div style="display:inline-block;vertical-align:top;">
-                  <img class="rounded-circle avatar-img z-depth-1-half" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(17)-mini.jpg" alt="Card image cap">
+                    {% if user.image_data != None %}
+                        <img src="data:image/png;base64,{{user.image_data}}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
+                    {% endif %}
                 </div>
 
                 <div style="display:inline-block;">
