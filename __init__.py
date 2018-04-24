@@ -67,7 +67,7 @@ def getProfilePicture(user):
 def addFriend(friend_user):
     users = mongo.db.users
     users.update( { 'username': session['username'] }, {"$push": {'user_friends': friend_user}} )
-    return discovery()
+    return redirect(url_for('discovery'))
 
 @app.route('/search/remove/<ObjectId:friend_user>', methods=['POST'])
 def removeFriend(friend_user):
@@ -82,15 +82,23 @@ def removeFriend(friend_user):
     key = 'user_friends.' + str(friend_index)
     users.find_one_and_update({ 'username': session['username'] }, { '$unset' : { key : 1 } })
     users.find_one_and_update({ 'username': session['username'] }, { '$pull' : { 'user_friends' : None } })
+    return redirect(url_for('discovery'))
 
-    return discovery()
-
+#TODO: UPDATE TO ADD WORKOUT TO ACTIVE WORKOUTS
 #Save workout (from friends/discovery)
-@app.route('/discovery/<ObjectId:workout>')
-def saveWorkout(workout):
+@app.route('/<request_path>/<ObjectId:workout>')
+def saveWorkout(request_path, workout):
     users = mongo.db.users
     users.update( { 'username': session['username'] }, {"$push": {'user_workouts': workout}} )
-    return discovery()
+    if request_path == 'profile':
+        return redirect(url_for('profile'))
+    else:
+        return redirect(url_for('discovery'))
+
+#TODO: MOVE WORKOUT TO HISTORY
+@app.route('/home/<ObjectId:workout>')
+def removeWorkout(workout):
+    return ''
 
 @app.route('/')
 def index():
@@ -157,7 +165,9 @@ def register():
                                 'height': request.form['height'],
                                 'experience': request.form['experience'],
                                 'user_workouts': [],
-                                'user_friends': []})
+                                'user_friends': [],
+                                'history': [],
+                                'active_workouts': []})
             session['username'] = request.form['username']
 
             return redirect(url_for('index'))
