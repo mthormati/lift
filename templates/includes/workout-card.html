@@ -25,12 +25,12 @@
                           <h4> {{ user_workout.title }} </h4>
                         </div>
                         <div style="display:inline-block;" class="float-right">
-                            {% if request.path == '/home' %}
-                                <a href="{{ url_for('removeWorkout', workout=user_workout._id) }}" type="button" class="btn-floating btn-danger"><i class="fa fa-close" aria-hidden="true"></i></a>
+                            {% if request.path == '/' %}
+                                <a href="{{ url_for('removeWorkout', workout=user_workout._id) }}" title="Delete Workout" type="button" class="btn-floating btn-danger"><i class="fa fa-close" aria-hidden="true"></i></a>
                             {% elif request.path == '/profile' %}
                                 <a href="{{ url_for('saveWorkout', request_path=request.path, workout=user_workout._id) }}" type="button" class="btn-floating teal"><i class="fa fa-recycle" aria-hidden="true"></i></a>
                             {% else %}
-                                <a href="{{ url_for('saveWorkout', request_path=request.path, workout=user_workout._id) }}" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+                                <a href="{{ url_for('saveWorkout', request_path=request.path, workout=user_workout._id) }}" title="Save Workout" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                             <li>
                                 <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input"
                                 data-workout="{{ user_workout['_id'] }}" data-exercise="{{ exercise['_id'] }}"
-                                {% if request.path != '/home' %} disabled {% endif %}>
+                                {% if request.path != '/' %} disabled {% endif %}>
                                 <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
                             </li>
                         {% endfor %}
