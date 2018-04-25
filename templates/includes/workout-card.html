@@ -43,7 +43,7 @@
                             <li>
                                 <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input"
                                 data-workout="{{ user_workout['_id'] }}" data-exercise="{{ exercise['_id'] }}"
-                                {% if request.path != '/home' %} disabled {% endif %}>
+                                {% if request.path != '/' %} disabled {% endif %}>
                                 <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
                             </li>
                         {% endfor %}
