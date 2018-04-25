@@ -20,7 +20,7 @@ mongo = PyMongo(app)
 
 #Get user workouts parsed as a readable object
 def getUserWorkouts(user):
-    mdb_user_workouts = user['user_workouts']
+    mdb_user_workouts = user['active_workouts']
     return parseWorkouts(mdb_user_workouts, user['name'], user)
 
 def parseWorkouts(mdb_user_workouts, name, user):
@@ -100,7 +100,12 @@ def saveWorkout(request_path, workout):
 #TODO: MOVE WORKOUT TO HISTORY
 @app.route('/home/<ObjectId:workout>')
 def removeWorkout(workout):
-    return ''
+    users = mongo.db.users
+    #delete workout from user's active workout
+    users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : workout} })
+    #add the deleted workout to history
+    users.update({ 'username': session['username'] }, {"$push": {'history': workout}} )
+    return redirect(url_for('index'))
 
 @app.route('/')
 def index():
@@ -116,27 +121,23 @@ def index():
 
 @app.route('/addexercise', methods=['GET','POST'])
 def addexercise():
+    #Retrieve user workout data from data base
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
-
-    #Retrieve user workout data from data base
+    #finding the workout that the user want to add exercise to
     exerciselist = mongo.db.exercises
     workoutlist = mongo.db.workouts
-    print "hi"
     workcard = workoutlist.find_one({'title': request.form['wtitle'], 'user': session['username']})
+    #add the exercise if the workout existed
     if workcard is not None:
         curwork = workcard['_id']
-        print workcard
-        print request.form['etitle']
-        print request.form['eduration']
-        print request.form['elink']
         exerciseid = exerciselist.insert({
             'title' : request.form['etitle'],
             'duration' : request.form['eduration'],
             'link' : request.form['elink']
             })
     #curwork = request.json['workoutId']
-
+        #add the exercise to the workout
         workoutlist.update({'_id': curwork}, { "$push":{ 'exercises' : exerciseid}})
     else:
         flash("Cannot find the workout")
@@ -145,13 +146,13 @@ def addexercise():
 
 @app.route('/addworkout',  methods=['POST'])
 def addworkout():
+    #Retrieve user workout data from data base
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
 
-    #Retrieve user workout data from data base
+    #adding workout to the database and user's workoutlist
     mdb_user_workouts = user['user_workouts']
     workoutlist = mongo.db.workouts
-    print session['username']
     addw = {
         'title' : request.form['title'],
         'exercises' : [],
