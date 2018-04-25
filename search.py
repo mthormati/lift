@@ -37,9 +37,9 @@ def searchQuery(search, mongo, current_user):
     for user in searchedUsers:
         if (user['_id'] != current_user['_id']): #You cannot search your own profile
             if (user['_id'] not in current_user['user_friends']): #You can only follow users you do not follow already
-                searchResult.users.append(make_user(user['name'], user['_id'], True, getProfilePicture(user)))
+                searchResult.users.append(make_user(user['name'], user['_id'], True, getProfilePicture(user['username'])))
             else:
-                searchResult.users.append(make_user(user['name'], user['_id'], False, getProfilePicture(user)))
+                searchResult.users.append(make_user(user['name'], user['_id'], False, getProfilePicture(user['username'])))
 
     #Code to find workouts
     searchedWorkouts = mongo.db.workouts.find({"tags": regex})
