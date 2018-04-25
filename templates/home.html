@@ -2,14 +2,14 @@
 
 {% block body %}
 
-<div id="top-section" class="container">
+<div id="top-section" class="container"></div>
 <div class="add-button" style="bottom: 115px; right: 100px;">
-    <a href="" title="Add Workout" class="btn-floating btn-lg blue-gradient"  data-toggle="modal" data-target="#modalworkout">
+    <a href="" title="Add Workout" class="btn-floating btn-lg blue-gradient" data-toggle="modal" data-target="#modalworkout">
       <i class="fa fa-plus" aria-hidden="true"></i>
     </a>
 </div>
 <div class="add-button" style="bottom: 200px; right: 100px;">
-    <a href="" title="Add Exercise" class="btn-floating btn-lg blue-gradient"  data-toggle="modal" data-target="#modalexercise">
+    <a href="" title="Add Exercise" class="btn-floating btn-lg blue-gradient" data-toggle="modal" data-target="#modalexercise">
       <i class="fa fa-list-alt" aria-hidden="true"></i>
     </a>
 </div>
@@ -22,7 +22,11 @@
 {% for user_workout in user_workouts %}
     {% include 'includes/workout-card.html' %}
 {% endfor %}
-
+<div>
 {% include '/addexercise.html' %}
+</div>
+<div>
+{% include '/addworkout.html' %}
+</div>
 
 {% endblock %}

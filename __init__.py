@@ -30,7 +30,7 @@ def parseWorkouts(mdb_user_workouts, name, user):
     workout_num = 1
     for mdb_user_workout in mdb_user_workouts:
         mdb_wo = mdb_workouts.find_one(mdb_user_workout)
-        #Parse exercies of workout
+        #Parse exercise of workout
         mdb_workout_exercises = mdb_wo['exercises']
         workout_exercises = []
         exercise_num = 1
