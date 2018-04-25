@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, session, redirect, send_file
+from flask import Flask, render_template, url_for, request, session, redirect, send_file, flash
 from variables import *
 from workout import *
 from exercise import *
@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 import bcrypt, os
 import codecs
 import random
+import logging
 
 app = Flask(__name__)
 
@@ -113,6 +114,35 @@ def index():
         return render_template('home.html', user_workouts=user_workouts)
     return render_template('index.html')
 
+@app.route('/addexercise', methods=['GET','POST'])
+def addexercise():
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+
+    #Retrieve user workout data from data base
+    exerciselist = mongo.db.exercises
+    workoutlist = mongo.db.workouts
+    print "hi"
+    workcard = workoutlist.find_one({'title': request.form['wtitle'], 'user': session['username']})
+    if workcard is not None:
+        curwork = workcard['_id']
+        print workcard
+        print request.form['etitle']
+        print request.form['eduration']
+        print request.form['elink']
+        exerciseid = exerciselist.insert({
+            'title' : request.form['etitle'],
+            'duration' : request.form['eduration'],
+            'link' : request.form['elink']
+            })
+    #curwork = request.json['workoutId']
+
+        workoutlist.update({'_id': curwork}, { "$push":{ 'exercises' : exerciseid}})
+    else:
+        flash("Cannot find the workout")
+
+    return redirect(url_for('index'))
+
 @app.route('/addworkout',  methods=['POST'])
 def addworkout():
     users = mongo.db.users
@@ -121,35 +151,16 @@ def addworkout():
     #Retrieve user workout data from data base
     mdb_user_workouts = user['user_workouts']
     workoutlist = mongo.db.workouts
+    print session['username']
     addw = {
         'title' : request.form['title'],
         'exercises' : [],
-        'tags' : []
+        'tags' : [],
+        'user' : session['username']
     }
     workid = workoutlist.insert(addw)
-    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid}})
+    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid, 'active_workouts' : workid}})
     return redirect(url_for('index'))
-
-@app.route('/addexercise', methods=['GET','POST'])
-def addexercise():
-    if request.method == 'POST':
-        users = mongo.db.users
-        user = users.find_one({'username': session['username']})
-
-        #Retrieve user workout data from data base
-        #mdb_user_workouts = user['user_workouts']
-        exerciselist = mongo.db.exercises
-        workoutlist = mongo.db.workouts
-        adde = {
-            'title' : request.form['title'],
-            'duration' : request.form['duration'],
-            'link' : request.form['link']
-            }
-        exerciseid = exerciselist.insert(adde)
-    #curwork = request.args.get('iid', None)
-    #workoutlist.update({'_id': curwork}, { "$push":{ 'exercises' : exerciseid}})
-        return redirect(url_for('index'))
-    return render_template('addexercise.html')
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
