@@ -3,12 +3,12 @@
 {% block body %}
 
 
-<div class="add-button" style="bottom: 45px; left: 25px;">
+<div class="add-button" style="bottom: 45px; right: 80px;">
     <a href="" title="Add Exercise" class="btn-floating blue-gradient" data-toggle="modal" data-target="#modalexercise">
       <i class="fa fa-list-alt" aria-hidden="true"></i>
     </a>
 </div>
-<div class="add-button" style="bottom: 45px; left: 80px;">
+<div class="add-button" style="bottom: 45px; right: 135px;">
     <a href="" title="Add Workout" class="btn-floating blue-gradient" data-toggle="modal" data-target="#modalworkout">
         <i class="fa fa-plus" aria-hidden="true"></i>
     </a>
@@ -20,6 +20,7 @@
 </div>
 
 {% for user_workout in user_workouts %}
+    {% set loop_index = loop.index0 %}
     {% include 'includes/workout-card.html' %}
 {% endfor %}
 
