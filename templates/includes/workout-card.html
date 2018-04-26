@@ -14,10 +14,10 @@
                     <!--Social meta-->
                     <div class="content">
                         <div style="display:inline-block;vertical-align:top;">
-                            {% if image_data != None %}
-                            <img src="data:image/png;base64,{{image_data}}" class="rounded-circle avatar-img z-depth-1-half">
+                            {% if user_workout.image_data != None %}
+                                <img src="data:image/png;base64,{{user_workout.image_data}}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
                             {% else %}
-                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half">
+                                <img src="{{ url_for('static', filename='assets/default-profile.png') }}" class="rounded-circle avatar-img z-depth-1-half" width="32" height="32">
                             {% endif %}
                         </div>
                         <div style="display:inline-block;">
@@ -25,8 +25,13 @@
                           <h4> {{ user_workout.title }} </h4>
                         </div>
                         <div style="display:inline-block;" class="float-right">
-
-                          <a href="{{ url_for('saveWorkout', workout=user_workout._id) }}" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+                            {% if request.path == '/' %}
+                                <a href="{{ url_for('removeWorkout', workout=user_workout._id) }}" title="Delete Workout" type="button" class="btn-floating btn-danger"><i class="fa fa-close" aria-hidden="true"></i></a>
+                            {% elif request.path == '/profile' %}
+                                <a href="{{ url_for('saveWorkout', request_path=request.path, workout=user_workout._id) }}" type="button" class="btn-floating teal"><i class="fa fa-recycle" aria-hidden="true"></i></a>
+                            {% else %}
+                                <a href="{{ url_for('saveWorkout', request_path=request.path, workout=user_workout._id) }}" title="Save Workout" type="button" class="btn-floating teal"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -37,15 +42,20 @@
                         {% for exercise in user_workout.exercises %}
                             <li>
                                 <input type="checkbox" id="{{ 'object-' + exercise.key }}" class="form-check-input"
-                                data-workout="{{ user_workout['_id'] }}" data-exercise="{{ exercise['_id'] }}">
+                                data-workout="{{ user_workout['_id'] }}" data-exercise="{{ exercise['_id'] }}"
+                                {% if request.path != '/' %} disabled {% endif %}>
                                 <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
                             </li>
                         {% endfor %}
                     </ul>
+
                 </div>
-
+                {% if request.path == '/' %}
                 <div class="card-body">
-
+                  <div style="display:inline-block;" class="float-right">
+                      <a method=POST href="{{ url_for('addexercise') }}" title="Add Exercise" type="button" class="btn-floating"><i class="fa teal fa-plus-square-o"></i></a>
+                  </div>
+                {% endif %}
                 </div>
                 <!--Card content-->
             </div>

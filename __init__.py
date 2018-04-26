@@ -1,13 +1,15 @@
-from flask import Flask, render_template, url_for, request, session, redirect, send_file
+from flask import Flask, render_template, url_for, request, session, redirect, send_file, flash
 from variables import *
 from workout import *
 from exercise import *
 from search import *
 from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from bson.objectid import ObjectId
 import bcrypt, os
 import codecs
 import random
+import logging
 
 app = Flask(__name__)
 
@@ -18,32 +20,39 @@ mongo = PyMongo(app)
 
 #Get user's workouts parsed as a readable object
 def getUserWorkouts(user):
-    mdb_user_workouts = user['user_workouts']
-    return parseWorkouts(mdb_user_workouts, user['name'])
+    mdb_user_workouts = user['active_workouts']
+    return parseWorkouts(mdb_user_workouts, user['name'], user)
 
-#Parses workouts under a given name from the specified array of objectId's
-def parseWorkouts(mdb_user_workouts, name):
+def parseWorkouts(mdb_user_workouts, name, user):
     mdb_workouts = mongo.db.workouts
     mdb_exercises = mongo.db.exercises
     user_workouts = []
     workout_num = 1
     for mdb_user_workout in mdb_user_workouts:
         mdb_wo = mdb_workouts.find_one(mdb_user_workout)
-        #Parse exercies of workout
+        #Parse exercise of workout
         mdb_workout_exercises = mdb_wo['exercises']
         workout_exercises = []
         exercise_num = 1
         for mdb_workout_exercise in mdb_workout_exercises:
             mdb_ex = mdb_exercises.find_one(mdb_workout_exercise)
-            workout_exercises.append(make_exercise(mdb_ex['title'], mdb_ex['duration'], mdb_ex['link'], 'w'+str(workout_num)+'e'+str(exercise_num), mdb_ex['_id']))
+            workout_exercises.append(make_exercise(mdb_ex['title'],
+                                                      mdb_ex['duration'],
+                                                      mdb_ex['link'],
+                                                      'w'+str(workout_num)+'e'+str(exercise_num),
+                                                      mdb_ex['_id'],))
             exercise_num+=1
-        user_workouts.append(make_workout(mdb_wo['title'], name, workout_exercises, mdb_wo['tags'], mdb_wo['_id']))
+        user_workouts.append(make_workout(mdb_wo['title'],
+                                           name,
+                                           workout_exercises,
+                                           mdb_wo['tags'],
+                                           mdb_wo['_id'],
+                                           getProfilePicture(user)))
         workout_num+=1
     return user_workouts
 
 #Takes in a user as a param
 #Returns the data for the image of the profile picture
-#Store return value in variable and pass it to template
 def getProfilePicture(user):
     fileCollection = mongo.db['fs.files']
     existingFile = fileCollection.find_one({'filename': user['username']})
@@ -56,24 +65,103 @@ def getProfilePicture(user):
     return image
 
 #Add friend
-@app.route('/search/<ObjectId:friend_user>')
+@app.route('/search/add/<ObjectId:friend_user>', methods=['POST'])
 def addFriend(friend_user):
     users = mongo.db.users
     users.update( { 'username': session['username'] }, {"$push": {'user_friends': friend_user}} )
-    return discovery()
+    return redirect(url_for('discovery'))
 
+@app.route('/search/remove/<ObjectId:friend_user>', methods=['POST'])
+def removeFriend(friend_user):
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    #Find index of friend in user_friends
+    for index, friend in enumerate(user['user_friends']):
+        if friend == friend_user:
+            friend_index = index
+            break
+    #Remove friend from user_friends
+    key = 'user_friends.' + str(friend_index)
+    users.find_one_and_update({ 'username': session['username'] }, { '$unset' : { key : 1 } })
+    users.find_one_and_update({ 'username': session['username'] }, { '$pull' : { 'user_friends' : None } })
+    return redirect(url_for('discovery'))
+
+#TODO: UPDATE TO ADD WORKOUT TO ACTIVE WORKOUTS
 #Save workout (from friends/discovery)
-@app.route('/discovery/<ObjectId:workout>')
-def saveWorkout(workout):
+@app.route('/<request_path>/<ObjectId:workout>')
+def saveWorkout(request_path, workout):
     users = mongo.db.users
     users.update( { 'username': session['username'] }, {"$push": {'user_workouts': workout}} )
-    return discovery()
+    if request_path == 'profile':
+        return redirect(url_for('profile'))
+    else:
+        return redirect(url_for('discovery'))
+
+#TODO: MOVE WORKOUT TO HISTORY
+@app.route('/home/<ObjectId:workout>')
+def removeWorkout(workout):
+    users = mongo.db.users
+    #delete workout from user's active workout
+    users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : workout} })
+    #add the deleted workout to history
+    users.update({ 'username': session['username'] }, {"$push": {'history': workout}} )
+    return redirect(url_for('index'))
 
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('home.html')
+        #Get user
+        users = mongo.db.users
+        user = users.find_one({'username': session['username']})
+        #Get the user's workouts
+        #mdb_user_workouts = user['user_workouts']
+        user_workouts = getUserWorkouts(user)
+        return render_template('home.html', user_workouts=user_workouts)
     return render_template('index.html')
+
+@app.route('/addexercise', methods=['GET','POST'])
+def addexercise(workout_id):
+    #Retrieve user workout data from data base
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    #finding the workout that the user want to add exercise to
+    exerciselist = mongo.db.exercises
+    workoutlist = mongo.db.workouts
+    workcard = workoutlist.find_one({'_id': workout_id, 'user': session['username']})
+    #add the exercise if the workout existed
+    if workcard is not None:
+        curwork = workcard['_id']
+        exerciseid = exerciselist.insert({
+            'title' : request.form['etitle'],
+            'duration' : request.form['eduration'],
+            'link' : request.form['elink']
+            })
+    #curwork = request.json['workoutId']
+        #add the exercise to the workout
+        workoutlist.update({'_id': curwork}, { "$push":{ 'exercises' : exerciseid}})
+    else:
+        flash("Cannot find the workout")
+
+    return redirect(url_for('index'))
+
+@app.route('/addworkout',  methods=['POST'])
+def addworkout():
+    #Retrieve user workout data from data base
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+
+    #adding workout to the database and user's workoutlist
+    mdb_user_workouts = user['user_workouts']
+    workoutlist = mongo.db.workouts
+    addw = {
+        'title' : request.form['title'],
+        'exercises' : [],
+        'tags' : [],
+        'user' : session['username']
+    }
+    workid = workoutlist.insert(addw)
+    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid, 'active_workouts' : workid}})
+    return redirect(url_for('index'))
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
@@ -88,7 +176,7 @@ def discovery():
     db_workouts = []
     for workout in mongo.db.workouts.find():
         db_workouts.append(workout)
-    other_discovery_workouts = parseWorkouts(db_workouts, "Lift Discovery")
+    other_discovery_workouts = parseWorkouts(db_workouts, "Lift Discovery", user)
     random.shuffle(other_discovery_workouts)
     #Retrieve user workout data from data base
     return render_template('discovery.html', user_workouts=friend_discovery_workouts, discovery_workouts=other_discovery_workouts)
@@ -100,7 +188,7 @@ def search():
     user = users.find_one({'username': session['username']})
     search = request.form['search']
     results = searchQuery(search, mongo, user)
-    return render_template('search.html', users=results.users, workouts=parseWorkouts(results.workouts, "Lift Workouts"))
+    return render_template('search.html', users=results.users, workouts=parseWorkouts(results.workouts, "Lift Workouts", user))
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -135,7 +223,9 @@ def register():
                                 'height': request.form['height'],
                                 'experience': request.form['experience'],
                                 'user_workouts': [],
-                                'user_friends': []})
+                                'user_friends': [],
+                                'history': [],
+                                'active_workouts': []})
             session['username'] = request.form['username']
 
             return redirect(url_for('index'))

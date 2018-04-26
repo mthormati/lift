@@ -1,111 +1,86 @@
-.blue-gradient {
-    background: -webkit-linear-gradient(50deg,#ffd86f,#fc6262) !important;
-    background: linear-gradient(40deg,#ffd86f,#fc6262) !important;
-  }
 
-  .nav-d {
-    background-color: rgba(0,0,0,0.3);
-  }
+.add-button
+{
+  position:fixed;
+  z-index:998;
+  right:35px;
+  bottom:35px;
+  margin-bottom:0;
+  padding-top:15px
 
-  .star-right {
-    float: right;
-    color: #9e9e9e;
-    margin-top: .3rem;
-      font-size: 28px;
-  }
+}
 
-  img.bkgd {
-    /* Set rules to fill background */
-     min-height: 100%;
-     min-width: 1024px;
+.totheright{
+  float: right;
+}
+.modal-notify .modal-header {
+    border-radius: 3px 3px 0 0;
+}
+.modal-notify .modal-content {
+    border-radius: 3px;
+}
 
-     /* Set up proportionate scaling */
-     width: 100%;
-     height: auto;
+a.midd {
+  text-align: center;
+  cursor: default;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-     /* Set up positioning */
-     position: fixed;
-     top: 0;
-     left: 0;
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 1;
+}
 
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-  }
-
-  .fa-star-o {
+.fa-heart-o {
+    cursor: pointer;
+    display: inline-block;
+    font: normal normal normal 20px/1 FontAwesome;
+    font-size: 25px;
     text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: rgba(0,0,0,.4);
     -webkit-transition: .30s;
     transition: .30s;
-  }
+    float: inherit;
+}
 
-  .fa-star-o:hover {
-      color: #FFD44E;
-  }
+.fa-heart-o:hover {
+    color: #ee6da8;
+}
 
-  a.midd {
+a.waves-effect, a.waves-light {
+    display: inline-block;
+}
+.btn-floating i {
+    display: inline-block;
+    width: inherit;
     text-align: center;
-    cursor: default;
-    font-size: 20px;
-    font-weight: bold;
-  }
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 47px;
+}
 
-  .waves-effect {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 1;
-  }
-
-  .fa-heart-o {
-      cursor: pointer;
-      display: inline-block;
-      font: normal normal normal 20px/1 FontAwesome;
-      font-size: 25px;
-      text-rendering: auto;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: rgba(0,0,0,.4);
-      -webkit-transition: .30s;
-      transition: .30s;
-      float: inherit;
-  }
-
-  .fa-heart-o:hover {
-      color: #ee6da8;
-  }
-
-  a.waves-effect, a.waves-light {
-      display: inline-block;
-  }
-  .btn-floating i {
-      display: inline-block;
-      width: inherit;
-      text-align: center;
-      color: #fff;
-      font-size: 1.25rem;
-      line-height: 47px;
-  }
-
-  .btn-floating {
-      width: 47px;
-      height: 47px;
-      position: relative;
-      z-index: 1;
-      vertical-align: middle;
-      display: inline-block;
-      overflow: hidden;
-      -webkit-transition: all .2s ease-in-out;
-      transition: all .2s ease-in-out;
-      margin: 10px;
-      border-radius: 50%;
-      padding: 0;
-      cursor: pointer;
-  }
+.btn-floating {
+    width: 47px;
+    height: 47px;
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    margin: 10px;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+}
