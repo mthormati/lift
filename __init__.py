@@ -19,8 +19,8 @@ app.config['MONGO_URI'] = database
 mongo = PyMongo(app)
 
 #Get user workouts parsed as a readable object
-def getUserWorkouts(user):
-    mdb_user_workouts = user['active_workouts']
+def getUserWorkouts(user, workout_type):
+    mdb_user_workouts = user[workout_type]
     return parseWorkouts(mdb_user_workouts, user['name'], user)
 
 def parseWorkouts(mdb_user_workouts, name, user):
@@ -42,12 +42,13 @@ def parseWorkouts(mdb_user_workouts, name, user):
                                                       'w'+str(workout_num)+'e'+str(exercise_num),
                                                       mdb_ex['_id'],))
             exercise_num+=1
+        workout_user = mongo.db.users.find_one({'username': mdb_wo['user']})
         user_workouts.append(make_workout(mdb_wo['title'],
-                                           name,
+                                           workout_user['name'],
                                            workout_exercises,
                                            mdb_wo['tags'],
                                            mdb_wo['_id'],
-                                           getProfilePicture(user)))
+                                           getProfilePicture(mdb_wo['user'])))
         workout_num+=1
     return user_workouts
 
@@ -55,10 +56,10 @@ def parseWorkouts(mdb_user_workouts, name, user):
 #Returns the data for the image of the profile picture
 def getProfilePicture(user):
     fileCollection = mongo.db['fs.files']
-    existingFile = fileCollection.find_one({'filename': user['username']})
+    existingFile = fileCollection.find_one({'filename': user})
     image = None
     if existingFile is not  None:
-        file_data = mongo.send_file(user['username'])
+        file_data = mongo.send_file(user)
         file_data.direct_passthrough = False
         base64_data = codecs.encode(file_data.data, 'base64')
         image = base64_data.decode('utf-8')
@@ -86,23 +87,28 @@ def removeFriend(friend_user):
     users.find_one_and_update({ 'username': session['username'] }, { '$pull' : { 'user_friends' : None } })
     return redirect(url_for('discovery'))
 
-#TODO: UPDATE TO ADD WORKOUT TO ACTIVE WORKOUTS
-#Save workout (from friends/discovery)
+#Save workout (from friends/discovery and profile)
 @app.route('/<request_path>/<ObjectId:workout>')
 def saveWorkout(request_path, workout):
     users = mongo.db.users
-    users.update( { 'username': session['username'] }, {"$push": {'user_workouts': workout}} )
     if request_path == 'profile':
+        #delete workout from user's history
+        users.update({ 'username': session['username'] }, { "$pull" : { 'history' : workout} })
+        #add the workout to active workout
+        users.update({ 'username': session['username'] }, {"$push": {'active_workouts': { '_id': workout, 'checked': [] }}} )
         return redirect(url_for('profile'))
     else:
+        #add the workout to user workout
+        users.update( { 'username': session['username'] }, {"$push": {'user_workouts': workout}} )
+        #add the workout to active workout
+        users.update({ 'username': session['username'] }, {"$push": {'active_workouts': { '_id': workout, 'checked': [] }}} )
         return redirect(url_for('discovery'))
 
-#TODO: MOVE WORKOUT TO HISTORY
 @app.route('/home/<ObjectId:workout>')
 def removeWorkout(workout):
     users = mongo.db.users
     #delete workout from user's active workout
-    users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : workout} })
+    users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : { '_id': workout }}})
     #add the deleted workout to history
     users.update({ 'username': session['username'] }, {"$push": {'history': workout}} )
     return redirect(url_for('index'))
@@ -115,8 +121,59 @@ def index():
         user = users.find_one({'username': session['username']})
         #Get the user's workouts
         #mdb_user_workouts = user['user_workouts']
-        user_workouts = getUserWorkouts(user)
-        return render_template('home.html', user_workouts=user_workouts)
+        # user_workouts = getUserWorkouts(user, 'active_workouts')
+
+        user_workouts = []
+        checked_list = []
+        mongo_user_workouts = user['active_workouts']
+        mongo_workouts = mongo.db.workouts
+        mongo_exercises = mongo.db.exercises
+        workout_num = 1
+        for mongo_user_workout in mongo_user_workouts:
+            workout = mongo_workouts.find_one(mongo_user_workout['_id'])
+            checked_exercises = mongo_user_workout['checked']
+            #Parse exercise of workout
+            mongo_workout_exercises = workout['exercises']
+            workout_exercises = []
+            checked_workout_exercises = []
+            exercise_num = 1
+            for mongo_workout_exercise in mongo_workout_exercises:
+                #Check if exercise is in checked array
+                # print(mongo_workout_ex)
+                found = False
+                if checked_exercises is not None:
+                    for check in checked_exercises:
+                        check_str = str(check)
+                        mongo_workout_exercise_str = str(mongo_workout_exercise)
+                        if check_str == mongo_workout_exercise_str:
+                            found = True
+                if found:
+                    checked_workout_exercises.append(True)
+                else:
+                    checked_workout_exercises.append(False)
+                exercise = mongo_exercises.find_one(mongo_workout_exercise)
+                workout_exercises.append(make_exercise(
+                    exercise['title'],
+                    exercise['duration'],
+                    exercise['link'],
+                    'w'+str(workout_num)+'e'+str(exercise_num),
+                    exercise['_id']
+                ))
+                exercise_num += 1
+            checked_list.append(checked_workout_exercises)
+            workout_user = mongo.db.users.find_one({'username': workout['user']})
+            user_workouts.append(make_workout(
+                workout['title'],
+                workout_user['name'],
+                workout_exercises,
+                workout['tags'],
+                workout['_id'],
+                getProfilePicture(workout['user'])
+            ))
+            workout_num += 1
+
+        print(checked_list)
+        return render_template('home.html', user_workouts=user_workouts, check_list=checked_list)
     return render_template('index.html')
 
 @app.route('/addexercise', methods=['GET','POST'])
@@ -127,7 +184,7 @@ def addexercise():
     #finding the workout that the user want to add exercise to
     exerciselist = mongo.db.exercises
     workoutlist = mongo.db.workouts
-    workcard = workoutlist.find_one({'title': request.form['wtitle'], 'user': session['username']})
+    workcard = workoutlist.find_one({'title': request.form['wtitle'], 'user': user['username']})
     #add the exercise if the workout existed
     if workcard is not None:
         curwork = workcard['_id']
@@ -157,10 +214,10 @@ def addworkout():
         'title' : request.form['title'],
         'exercises' : [],
         'tags' : [],
-        'user' : session['username']
+        'user' : user['username']
     }
     workid = workoutlist.insert(addw)
-    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid, 'active_workouts' : workid}})
+    users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid, 'active_workouts' : { '_id': workid, 'checked': [] } }})
     return redirect(url_for('index'))
 
 @app.route('/discovery', methods=['GET'])
@@ -169,7 +226,7 @@ def discovery():
     user = users.find_one({'username': session['username']})
     friend_discovery_workouts = []
     for friend in user['user_friends']:
-        friend_workouts = getUserWorkouts(users.find_one( {'_id': friend} ))
+        friend_workouts = getUserWorkouts(users.find_one( {'_id': friend} ), 'user_workouts')
         for fwo in friend_workouts:
             friend_discovery_workouts.append(fwo)
     other_discovery_workouts = []
@@ -233,20 +290,14 @@ def register():
     return render_template('register.html')
 
 @app.route('/profile', methods=['GET', 'POST'])
-#GET display profile
-#POST update profile information
-
-#TODO: split workouts into active and completed workouts
-#Display only completed workouts in profile
-#Add option to move workout back to active
-
 def profile():
     #Get user
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
-    image = getProfilePicture(user)
+    image = getProfilePicture(user['username'])
 
     if request.method == 'POST':
+        #Update user info
         users.find_one_and_update(
             {'_id': user['_id']},
             {
@@ -278,7 +329,7 @@ def profile():
         return redirect(url_for('profile'))
 
     #Get the user's workouts
-    user_workouts = getUserWorkouts(user)
+    user_workouts = getUserWorkouts(user, 'history')
     return render_template('profile.html', user=user, user_workouts=user_workouts, image_data=image)
 
 @app.route('/logout')
@@ -291,7 +342,35 @@ def handleCheck():
     #Get workoutId use request.json['workoutId']
     #Get exerciseId user request.json['exerciseId']
     #Get checked status (boolean) of checkbox use request.json['checked']
-    print(request.json['checked'])
+    users = mongo.db.users
+    user = users.find_one({'username': session['username']})
+    #Get current array of checked items
+    active_workouts = user['active_workouts']
+    workout = {}
+    for active_workout in active_workouts:
+        str_id = str(active_workout['_id'])
+        if request.json['workoutId'] == str_id:
+            workout = active_workout
+    check_list = workout['checked']
+
+    if request.json['checked']:
+        #Append exerciseId to check_list
+        check_list.append(ObjectId(request.json['exerciseId']))
+        obj_id = ObjectId(request.json['workoutId'])
+        #Remove clicked workout from user and add it back with updated check list
+        users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : { '_id': obj_id }}})
+        users.update({ 'username': session['username'] }, {"$push": {'active_workouts': { '_id': obj_id, 'checked': check_list }}} )
+    else:
+    #     #Create new list without unchecked exerciseId
+        new_list = []
+        for check_item in check_list:
+            id_str = str(check_item)
+            if request.json['exerciseId'] != id_str:
+                new_list.append(check_item)
+        obj_id = ObjectId(request.json['workoutId'])
+    #     #Remove clicked workout from user and add it back with updated check list
+        users.update({ 'username': session['username'] }, { "$pull" : { 'active_workouts' : { '_id': obj_id }}})
+        users.update({ 'username': session['username'] }, {"$push": {'active_workouts': { '_id': obj_id, 'checked': new_list }}} )
     return ''
 
 if __name__ == '__main__':
