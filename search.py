@@ -53,4 +53,5 @@ def searchQuery(search, mongo, current_user):
         if (workout['_id'] not in current_user['user_workouts']):
             if (workout['_id'] not in searchResult.workouts):
                 searchResult.workouts.append(workout['_id'])
+                break
     return searchResult
