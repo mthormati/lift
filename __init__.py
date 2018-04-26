@@ -120,14 +120,14 @@ def index():
     return render_template('index.html')
 
 @app.route('/addexercise', methods=['GET','POST'])
-def addexercise(workout_id):
+def addexercise():
     #Retrieve user workout data from data base
     users = mongo.db.users
     user = users.find_one({'username': session['username']})
     #finding the workout that the user want to add exercise to
     exerciselist = mongo.db.exercises
     workoutlist = mongo.db.workouts
-    workcard = workoutlist.find_one({'_id': workout_id, 'user': session['username']})
+    workcard = workoutlist.find_one({'title': request.form['wtitle'], 'user': session['username']})
     #add the exercise if the workout existed
     if workcard is not None:
         curwork = workcard['_id']
