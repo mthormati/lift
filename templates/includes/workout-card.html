@@ -46,7 +46,9 @@
                                 {% if request.path != '/' %} disabled {% endif %}
                                 {% if check_list != null and check_list[loop_index][loop.index0] %} checked {% endif %}>
                                 <label class="form-check-label" for="{{ 'object-' + exercise.key }}">{{ exercise.title }} > {{ exercise.duration }}</label>
+                                  <a class="fa fa-info-circle ml-3" href="{{ 'https://' + exercise.link }}" target="_blank"></a>
                             </li>
+
                         {% endfor %}
                     </ul>
                 </div>
