@@ -49,9 +49,13 @@
                         {% endfor %}
                     </ul>
                 </div>
-
                 <div class="card-body">
-
+                    <p> Tags: </p>
+                     <p class="blue-text">
+                       {% if user_workout.tags|length >= 2 %}
+                          {{ user_workout.tags }}
+                       {% endif %}
+                     </p>
                 </div>
                 <!--Card content-->
             </div>

@@ -156,7 +156,7 @@ def addworkout():
     addw = {
         'title' : request.form['title'],
         'exercises' : [],
-        'tags' : [],
+        'tags' : request.form['tags'],
         'user' : session['username']
     }
     workid = workoutlist.insert(addw)
