@@ -42,7 +42,15 @@ def searchQuery(search, mongo, current_user):
                 searchResult.users.append(make_user(user['name'], user['_id'], False, getProfilePicture(user)))
 
     #Code to find workouts
-    searchedWorkouts = mongo.db.workouts.find({"tags": regex})
+    searchResult.workouts.clear()
+    searchedWorkouts = []
+    print(search)
+    for workout in mongo.db.workouts.find():
+        for tag in workout['tags']:
+            print(tag)
+            if search in tag:
+                searchedWorkouts.append(workout)
+
     for workout in searchedWorkouts:
         if (workout['_id'] not in current_user['user_workouts']):
             print("searched")
