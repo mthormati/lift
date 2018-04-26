@@ -238,6 +238,7 @@ def discovery():
     #Retrieve user workout data from data base
     return render_template('discovery.html', user_workouts=friend_discovery_workouts, discovery_workouts=other_discovery_workouts)
 
+#Uses "wildcard + query + wildcard" for search
 @app.route('/search', methods=['POST'])
 def search():
     users = mongo.db.users

@@ -4,10 +4,18 @@
   <!--Grid row-->
     {% for user in users %}
       {% include 'includes/user-card.html' %}
+    {% else %}
+    <center>
+        <h6>No users found!</h6>
+    </center>
     {% endfor %}
     <hr>
     {% for user_workout in workouts %}
       {% include 'includes/workout-card.html' %}
+    {% else %}
+    <center>
+      <h6>No workouts found!</h6>
+    </center>
     {% endfor %}
 
 {% endblock %}
