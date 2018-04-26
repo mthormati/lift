@@ -51,12 +51,15 @@
                     </ul>
                 </div>
                 <div class="card-body">
-                    <p> Tags: </p>
-                     <p class="blue-text">
+                    <p class="tagfont"> Tags:
+                     <a class="blue-text">
                        {% if user_workout.tags|length >= 2 %}
-                          {{ user_workout.tags }}
+                          {% for tagss in user_workout.tags %}
+                            {{tagss}}
+                          {% endfor %}
                        {% endif %}
-                     </p>
+                     </a>
+                  </p>
                 </div>
                 <!--Card content-->
             </div>
