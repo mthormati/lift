@@ -2,31 +2,33 @@
 
 {% block body %}
 
-<div id="top-section" class="container"></div>
-<div class="add-button" style="bottom: 115px; right: 100px;">
-    <a href="" title="Add Workout" class="btn-floating btn-lg blue-gradient" data-toggle="modal" data-target="#modalworkout">
-      <i class="fa fa-plus" aria-hidden="true"></i>
-    </a>
-</div>
-<div class="add-button" style="bottom: 200px; right: 100px;">
-    <a href="" title="Add Exercise" class="btn-floating btn-lg blue-gradient" data-toggle="modal" data-target="#modalexercise">
+
+<div class="add-button" style="bottom: 45px; right: 80px;">
+    <a href="" title="Add Exercise" class="btn-floating blue-gradient" data-toggle="modal" data-target="#modalexercise">
       <i class="fa fa-list-alt" aria-hidden="true"></i>
     </a>
 </div>
-<div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 108px;">
-    <a href="#top-section" title="Go to top" class="btn-floating btn-large blue-gradient">
+<div class="add-button" style="bottom: 45px; right: 135px;">
+    <a href="" title="Add Workout" class="btn-floating blue-gradient" data-toggle="modal" data-target="#modalworkout">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+    </a>
+</div>
+<div class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 25px;">
+    <a href="#top-navbar" title="Go to top" class="btn-floating btn-large blue-gradient">
         <i class="fa fa-arrow-up"></i>
     </a>
-
 </div>
+
 {% for user_workout in user_workouts %}
+    {% set loop_index = loop.index0 %}
     {% include 'includes/workout-card.html' %}
 {% endfor %}
+
 <div>
-{% include '/addexercise.html' %}
+    {% include '/addexercise.html' %}
 </div>
 <div>
-{% include '/addworkout.html' %}
+    {% include '/addworkout.html' %}
 </div>
 
 {% endblock %}
