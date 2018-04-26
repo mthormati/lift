@@ -48,6 +48,7 @@ def searchQuery(search, mongo, current_user):
         for tag in workout['tags']:
             if search in tag:
                 searchedWorkouts.append(workout)
+                break
 
     for workout in searchedWorkouts:
         if (workout['_id'] not in current_user['user_workouts']):
