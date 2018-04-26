@@ -44,17 +44,13 @@ def searchQuery(search, mongo, current_user):
     #Code to find workouts
     searchResult.workouts.clear()
     searchedWorkouts = []
-    print(search)
     for workout in mongo.db.workouts.find():
         for tag in workout['tags']:
-            print(tag)
             if search in tag:
                 searchedWorkouts.append(workout)
 
     for workout in searchedWorkouts:
         if (workout['_id'] not in current_user['user_workouts']):
-            print("searched")
             if (workout['_id'] not in searchResult.workouts):
-                print("added")
                 searchResult.workouts.append(workout['_id'])
     return searchResult
