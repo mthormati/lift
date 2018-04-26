@@ -10,6 +10,10 @@
 
 }
 
+.tagfont{
+  font-size: 15px;
+}
+
 .totheright{
   float: right;
 }

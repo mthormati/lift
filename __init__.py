@@ -210,11 +210,12 @@ def addworkout():
     #adding workout to the database and user's workoutlist
     mdb_user_workouts = user['user_workouts']
     workoutlist = mongo.db.workouts
+    tagsplit = request.form['tags'].split(' ')
     addw = {
         'title' : request.form['title'],
         'exercises' : [],
-        'tags' : [],
-        'user' : user['username']
+        'tags' : tagsplit,
+        'user' : session['username']
     }
     workid = workoutlist.insert(addw)
     users.update({'username': session['username']}, { "$push":{ 'user_workouts' : workid, 'active_workouts' : { '_id': workid, 'checked': [] } }})
